@@ -28,14 +28,19 @@ from datetime import datetime as DT
 import sys
 
 today = datetime.datetime.now()
-
-#ctypes.windll.kernel32.SetConsoleTitleW("OrderUP_CA_SWBC_AMO-Amy_taylor") 
-
 # urllib3_logger = logging.getLogger('urllib3')
 # urllib3_logger.setLevel(logging.CRITICAL)
 # today = DT.now()
-# LOG_FILENAME = "backup\OrderUP_CA_others\Amy_taylor/" + today.strftime('OrderUP_CA_SWBC_AMOLogs--%H_%M_%S_%d_%m_%Y.log')
+# LOG_FILENAME = "backup\AMO_other_clients\Amy_Taylor/" + today.strftime('OrderUP_CA_SWBC_AMOLogs--%H_%M_%S_%d_%m_%Y.log')
 # logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+
+# ctypes.windll.kernel32.SetConsoleTitleW("OrderUP_CA_SWBC_AMO-AmyTaylor") 
+
+#urllib3_logger = logging.getLogger('urllib3')
+#urllib3_logger.setLevel(logging.CRITICAL)
+#today = DT.now()
+#LOG_FILENAME = "backup\OrderUP_CA_SWBC_AMO-others/" + today.strftime('OrderUP_CA_SWBC_AMOLogs--%H_%M_%S_%d_%m_%Y.log')
+#logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
 def logger_portal(client_name,portalname,mainclient):
     """This Function is used to Setup logging"""
@@ -47,6 +52,34 @@ def logger_portal(client_name,portalname,mainclient):
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
     logging.getLogger("PIL.PngImagePlugin").setLevel(logging.WARNING)
     logging.getLogger().propagate=False
+
+def checkscriptupdate(subclient,portal,mainclient):
+    folder="S:\Portal Order Updation App script\checkfolder"
+    checkscript= f"{subclient}-{portal}.json"
+    file_path = os.path.join(folder,checkscript)
+    with open(file_path, 'w') as json_file:
+        current_time = datetime.datetime.now()
+        check_hours = current_time.hour
+        check_minutes = current_time.minute
+        check_seconds = current_time.second
+        #print("Current time:", current_time)
+        current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        row_data = {
+            "filedtype":subclient,"portal":portal,"mainclient":mainclient, 
+            "values":[
+                {
+                "mainclient":mainclient,     
+                "client":subclient,
+                "portal":portal,
+                "check_hours":check_hours,
+                "check_minutes":check_minutes,
+                "check_seconds":check_seconds,
+                "current_time":current_time_str
+                }
+            ]
+        },
+        json.dump(row_data, json_file, indent=2)
+
 
 photo = '375' #ecesis photographer
 auto = '0' #is the order auto accepted '0'-Not auto accepted
@@ -84,7 +117,7 @@ def maipping_mailsend(p,address,portal,client,ordertype,to,subject):
         ordertpe_message = 'We are unable to identify the {} for the following order\n\n Address: {} \n Portal: {} \n Client: {} \n Order Type {}'.format(p,address,portal,client,ordertype)
         mail = sender.Mail('smtp.gmail.com','notifications@bpoacceptor.com','$oft@ece2021', 465, use_ssl=True,fromaddr='notifications@bpoacceptor.com')
         mail.send_message(subject=subject, to=to,body=ordertpe_message)
-        #print('Mapping issue reported')
+        #('Mapping issue reported')
         logging.info('Mapping issue reported')
     except Exception as e:
         #(e)
@@ -143,8 +176,7 @@ def date_to_IST(due):#convert duedate and time to IST ==> Provide duedate - <due
         logging.info('IST Due Date {}'.format(ISTdue))
         return ISTdue
     except Exception as e:
-        #(f'Failed to convert duedate ==> {due} to IST')
-         logging.info('Failed to convert duedate ==> {due} to IST')
+        logging.info(f'Failed to convert duedate ==> {due} to IST')
         
 #=====================================================================================
     
@@ -195,6 +227,7 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
             typId = None  
         cursor.close()
         conn.close()'''
+
         ordertype_json = 'S:\Portal Order Updation App script\order_type.json'
         with open(ordertype_json, 'r') as json_file:
             data_type = json.load(json_file)
@@ -222,12 +255,12 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
                             logging.info("Using Default Type -- 7")
                             typId = None  
                     if typId == None:
-                        #("Check next set")
-                         logging.info("Check next set")
+                        logging.info("Check next set")
                     else:
                         break
             
             #(typId)
+
 
         # if typ in all_order_types:
         #         typId = all_order_types[typ]
@@ -393,8 +426,7 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
                                     #("no need to create folder")
                                     logging.info("no need to create folder")
                             except Exception as e:
-                                #(e)
-                                 logging.info(e)
+                                logging.info(e)
             #####################################################################
         else:
                 if not clientId:
@@ -472,7 +504,7 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
 #                         #(zadd)
 #                     logging.info('Zillowaddress : {}'.format(zadd))
 #                     return zadd
-#             ###################################################################
+            ###################################################################
 
 def check(mainclient,session, resp, Mainclient, Subclient, portal, cid, ats_client_id, ats_portal_id,link):
         client=Mainclient+'-'+Subclient
@@ -504,8 +536,8 @@ def check(mainclient,session, resp, Mainclient, Subclient, portal, cid, ats_clie
                     folderadd= '{}, {}, {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
                     #(folderadd)
                     logging.info(folderadd)
+                    #address_value=zillowfunc(folderadd) ###calling function to get the zillow address
                     address_value = folderadd
-                    # address_value=zillowfunc(folderadd) ###calling function to get the zillow address
                     orderid= o['OrderID']
                     AssetType= o['Product']
                     Fee=o['VendorFee']
@@ -620,9 +652,8 @@ def checkAMO(mainclient,username,password,cid,ats_client_id,ats_portal_id,portal
                     folderadd= '{}, {}, {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
                     #(folderadd)
                     logging.info(folderadd)
-                    address_value = folderadd                 
                     #address_value=zillowfunc(folderadd) ###calling the function "zillowfunc" function to get the zillow address
-                    
+                    address_value = folderadd
                     AssetType= o['Product']
                     Fee=o['VendorFee']
                     orderid=o['OrderID']
@@ -666,93 +697,167 @@ def checkAMO(mainclient,username,password,cid,ats_client_id,ats_portal_id,portal
 
 #--------------------------Main Function-------------------------------------------------# 
 def Query_JSON(json_file_path):
-    with open(json_file_path, 'r') as json_file:
-        data = json.load(json_file)
-        cid = sys.argv[1]
-        cid=int(cid)
-        #cid = 5871
-        filtered_data = [entry for entry in data if entry.get("filedtype") == cid]
-        #(filtered_data)
-    for value in filtered_data:
-        for values in value['values']:
-            mainclient = values.get('mainclient')
-            subclient = values.get('subclient')
-            portal = values.get('portal')
-            username = values.get('username')
-            password = values.get('password')
-            credstatus = values.get('credstatus')
-            ordercheckstatus = values.get('ordercheckstatus')
-            ats_client_id = values.get('ats_client_id')
-            ats_portal_id = values.get('ats_portal_id')
+        with open(json_file_path, 'r') as json_file:
+            data = json.load(json_file)
+            cid = sys.argv[1]
+            cid=int(cid)
+            #cid = 6002
+            filtered_data = [entry for entry in data if entry.get("filedtype") == cid]
+            #(filtered_data)
+        for value in filtered_data:
+            for values in value['values']:
+                mainclient = values.get('mainclient')
+                subclient = values.get('subclient')
+                portal = values.get('portal')
+                username = values.get('username')
+                password = values.get('password')
+                credstatus = values.get('credstatus')
+                ordercheckstatus = values.get('ordercheckstatus')
+                ats_client_id = values.get('ats_client_id')
+                ats_portal_id = values.get('ats_portal_id')
 
-            #('Fetching details from JSON file...')
-            #('CID:', cid)
-            #('Mainclient:', mainclient)
-            #('Subclient:', subclient)
-            #('Portal:', portal)
-            #('Username:', username)
-            #('Password:', password)
-            #('Credstatus:', credstatus)
-            #('Ordercheckstatus:', ordercheckstatus)
-            #('ATS Client ID:', ats_client_id)
-            #('ATS Portal ID:', ats_portal_id)
-            logger_portal(subclient,portal,mainclient)
-            headers={}#sending headers to prevent login denied ORSS issue
-            client=mainclient+'-'+subclient
-            if credstatus == 'Active':                            
-                    #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
-                    logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
-                    ###################################################################################
-                    try:
-                            
-                            
-                            if portal == "CA":
-                                    #("Trying to Log in CA portal")
-                                    logging.info("Trying to Log in CA portal")
+                #('Fetching details from JSON file...')
+                #('CID:', cid)
+                #('Mainclient:', mainclient)
+                #('Subclient:', subclient)
+                #('Portal:', portal)
+                #('Username:', username)
+                #('Password:', password)
+                #('Credstatus:', credstatus)
+                #('Ordercheckstatus:', ordercheckstatus)
+                #('ATS Client ID:', ats_client_id)
+                #('ATS Portal ID:', ats_portal_id)
+                logger_portal(subclient,portal,mainclient)
+                checkscriptupdate(subclient,portal,mainclient)
+                headers={}#sending headers to prevent login denied ORSS issue
+                client=mainclient+'-'+subclient
+                if credstatus == 'Active':                            
+                        #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                        logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                        ###################################################################################
+                        try:
+                                
+                                '''if portal == 'SWBC':
                                     session = requests.session()
-                                    cookies = requests.utils.dict_from_cookiejar(session.cookies)
-                                    url = "https://vendors.ca-usa.com/Account/Login?ReturnUrl=%2fOrders%2fDashboard"
-                                    link = "https://vendors.ca-usa.com"
-                                    resp = session.post(url)
-                                    soup = BeautifulSoup(resp.content, 'html.parser')
-                                    tokken = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
                                     data = {
-                                            '__RequestVerificationToken': tokken,
-                                            'Username': username,
-                                            'Password': password,
-                                            'singlebutton:': ''
-                                            }
-                                    resp = session.post(url,data=data)
-                                    check(mainclient,session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,link)
-                                    random_sleep_time = randint(900,1200)
-                                    #('Next account will be checked after %s seconds' % (random_sleep_time))
-                                    logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
-                                    time.sleep(random_sleep_time) 
-                            
+                                                'Username':username,
+                                                'Password':password,
+                                                'singlebutton':''
+                                        }
+                                    if portal == 'SWBC':
+                                        link = "https://swbcls-vendors.clearvalueconsulting.com"
+                                    else:
+                                        #('Portal not added in order updation')
+                                        logging.info('Portal not added in order updation')
                                         
-                            else:
-                                #('Portal not added in order updation')
-                                logging.info('Portal not added in order updation')
-                                
-                    except Exception as ex:
-                                    #('Exception raised ..')
-                                    logging.info('Exception raised ..')
-                                    #(ex)
-                                    logging.info(ex)
-                                    time.sleep(10)
-            else:
-                #('Bad Password')
-                logging.info('Bad Password')
-                random_sleep_time = randint(900,1200)
-                #('Next account will be checked after %s seconds' % (random_sleep_time))
-                logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
-                time.sleep(random_sleep_time)
-# json_file_path = 'S:\PORTAL ORDER UPDATION\output_data.json'
-# Query_JSON(json_file_path)                             
-            
-                                
-#---------------------------------------------------------------------------------------#
+                                    try:
+                                        session = requests.session()
+                                        url='https://swbcls-vendors.clearvalueconsulting.com/Account/Logout'
+                                        headers={
+                                                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                                                    'Accept-Encoding': 'gzip, deflate, br',
+                                                    'Accept-Language': 'en-US,en;q=0.9',
+                                                    'Cache-Control': 'max-age=0',
+                                                    'Connection': 'keep-alive',                
+                                                    'Host': 'swbcls-vendors.clearvalueconsulting.com',
+                                                    'Referer': 'https://swbcls-vendors.clearvalueconsulting.com/Account/Login?ReturnUrl=%2fAccount%2fLogout',
+                                                    'Sec-Fetch-Dest': 'document',
+                                                    'Sec-Fetch-Mode': 'navigate',
+                                                    'Sec-Fetch-Site': 'same-origin',
+                                                    'Sec-Fetch-User': '?1',
+                                                    'Upgrade-Insecure-Requests': '1',
+                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'
+
+                                                }
+                                        resp = session.get(url,headers=headers)
+                                        soup = BeautifulSoup(resp.content, 'html.parser')
+                                        tokken = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
+                                        #(tokken)
+                                        url = link+"/Account/Login?ReturnUrl=%2f"
+                                        data = {
+                                                '__RequestVerificationToken':tokken,
+                                                'Username':username,
+                                                'Password':password,
+                                                'singlebutton':''
+                                        }
+                                        headers = {
+                                                    'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+                                                    'Accept-Encoding':'gzip, deflate, br',
+                                                    'Accept-Language': 'en-US,en;q=0.9',
+                                                    'Cache-Control': 'max-age=0',
+                                                    'Connection': 'keep-alive',
+                                                    'Content-Length': '66',
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                    'Host': link.replace("https://",""),
+                                                    'Origin': link,
+                                                    'Referer': link+'/Account/Login?ReturnUrl=%2f',
+                                                    'Upgrade-Insecure-Requests': '1',
+                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36ari/537.36'
+                                                    }
+                                        
+                                        resp = session.post(url, data=data,headers=headers)
+                                        check(mainclient,session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,link)#pass ATS ID's
+                                        
+                                        random_sleep_time = randint(0,180)
+                                        #('Next account will be checked after %s seconds' % (random_sleep_time))
+                                        logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                                        time.sleep(random_sleep_time) 
+                                    except Exception as e:
+                                        #(e)
+                                        logging.info(e)
+                                        #('Unable to login')
+                                        logging.info('Unable to login')
+                                        time.sleep(10)
+                                elif portal == "CA":
+                                        #("Trying to Log in CA portal")
+                                        logging.info("Trying to Log in CA portal")
+                                        session = requests.session()
+                                        cookies = requests.utils.dict_from_cookiejar(session.cookies)
+                                        url = "https://vendors.ca-usa.com/Account/Login?ReturnUrl=%2fOrders%2fDashboard"
+                                        link = "https://vendors.ca-usa.com"
+                                        resp = session.post(url)
+                                        soup = BeautifulSoup(resp.content, 'html.parser')
+                                        tokken = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
+                                        data = {
+                                                '__RequestVerificationToken': tokken,
+                                                'Username': username,
+                                                'Password': password,
+                                                'singlebutton:': ''
+                                                }
+                                        resp = session.post(url,data=data)
+                                        check(mainclient,session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,link)
+                                        random_sleep_time = randint(300,600)
+                                        #('Next account will be checked after %s seconds' % (random_sleep_time))
+                                        logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                                        time.sleep(random_sleep_time) '''
+                                if portal == "AMO":
+                                        checkAMO(mainclient,username,password,cid,ats_client_id,ats_portal_id,portal,client) 
+                                        random_sleep_time = randint(900,1200)
+                                        #('Next account will be checked after %s seconds' % (random_sleep_time))
+                                        logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                                        time.sleep(random_sleep_time)    
+                                else:
+                                    #('Portal not added in order updation')
+                                    logging.info('Portal not added in order updation')
+                                    
+                        except Exception as ex:
+                                        #('Exception raised ..')
+                                        logging.info('Exception raised ..')
+                                        #(ex)
+                                        logging.info(ex)
+                                        time.sleep(10)
+                else:
+                    #('Bad Password')
+                    logging.info('Bad Password')
+                    random_sleep_time = randint(900,1200)
+                    #('Next account will be checked after %s seconds' % (random_sleep_time))
+                    logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                    time.sleep(random_sleep_time)   
+                
 json_file_path = 'S:\Portal Order Updation App script\output_data.json'
+# Query_JSON(json_file_path)                                 
+#---------------------------------------------------------------------------------------#
+
 def main():
     while True:
         Query_JSON(json_file_path)

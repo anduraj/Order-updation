@@ -66,7 +66,7 @@ non_decimal = re.compile(r'[^\d.]+')#remove alphabets from price string
 def document_dwnload(respp, rlen, mainclient, address, session):
     for i in range(1, rlen+1):
         try:
-            ##("Trying to download...")
+            #("Trying to download...")
             logging.info("Trying to download...")
             doc_name = respp.xpath("//table/tbody/tr[{}]/td[2]/text()".format(i)).get()
             logging.info('doc_name :{}'.format(doc_name))
@@ -75,7 +75,7 @@ def document_dwnload(respp, rlen, mainclient, address, session):
             href = 'https://valuationops.homegenius.com'+href
             extnsn = href.split('.')[-1]
             logging.info('extention:{}'.format(extnsn))
-            ##('url:', href)
+            #('url:', href)
             logging.info('url :{}'.format(href))
             year = datetime.datetime.now().strftime('%Y')
             month = datetime.datetime.now().strftime('%B')
@@ -110,17 +110,17 @@ def OA_Available(session, itemid, orderid, mainclient, address):
         logging.info('Response:\n{}\n'.format(respp.text))
         try:
             rows = respp.xpath("//table/tbody/tr").extract()
-            ##("Documents available for order: ", rows)
+            #("Documents available for order: ", rows)
             logging.info('Documents available for order: {}'.format(rows))
             rlen = len(rows)
-            ##("no of rows:", rlen)
+            #("no of rows:", rlen)
             logging.info('no of rows: {}'.format(rlen))
             try:
                 doc_dtl = ' '.join(map(str, rows))
                 if (("Agent LOE" in doc_dtl) and (rlen > 1)):
                     logging.info("condition 1")
                     condition = 'OA/Doc'
-                    ##('<<<<<<<<<<<< condition is OA/Doc Available >>>>>>>>>>>>>>')
+                    #('<<<<<<<<<<<< condition is OA/Doc Available >>>>>>>>>>>>>>')
                     logging.info("condition 1")
                     logging.info('condition is :{}'.format(condition))
                     document_dwnload(respp, rlen, mainclient, address, session)
@@ -128,7 +128,7 @@ def OA_Available(session, itemid, orderid, mainclient, address):
                     if (("Agent LOE" not in doc_dtl) and (rlen > 0)):
                         logging.info("condition 2")
                         condition = 'OA/Doc'
-                        ##('<<<<<<<<<<<< condition is OA/Doc Available >>>>>>>>>>>>>>')
+                        #('<<<<<<<<<<<< condition is OA/Doc Available >>>>>>>>>>>>>>')
                         logging.info('condition is :{}'.format(condition))
                         document_dwnload(respp, rlen, mainclient, address, session)
                     else:
@@ -139,10 +139,10 @@ def OA_Available(session, itemid, orderid, mainclient, address):
             except Exception as x:
                 logging.error(x)
         except Exception as e:
-            ##(e)
+            #(e)
             logging.error(e)
     except Exception as e:
-        #('exception in OA Available function', e)
+        #print('exception in OA Available function', e)
         logging.error(e)
         
 def maipping_mailsend(p,address,portal,client,ordertype,to,subject):
@@ -150,10 +150,10 @@ def maipping_mailsend(p,address,portal,client,ordertype,to,subject):
         ordertpe_message = 'We are unable to identify the {} for the following order\n\n Address: {} \n Portal: {} \n Client: {} \n Order Type {}'.format(p,address,portal,client,ordertype)
         mail = sender.Mail('smtp.gmail.com','notifications@bpoacceptor.com','$oft@ece2021', 465, use_ssl=True,fromaddr='notifications@bpoacceptor.com')
         mail.send_message(subject=subject, to=to,body=ordertpe_message)
-        ##('Mapping issue reported')
+        #('Mapping issue reported')
         logging.info('Mapping issue reported')
     except Exception as e:
-        ##(e)
+        #(e)
         logging.error(e)
 
 #--------------------------Main Function-------------------------------------------------#OR form LIKE 'Xome' OR  form LIKE 'New Sam' OR form LIKE 'ORSS'
@@ -163,8 +163,7 @@ def Query_JSON(json_file_path):
         cid = sys.argv[1]
         cid=int(cid)
         filtered_data = [entry for entry in data if entry.get("filedtype") == cid]
-        ##(filtered_data)
-        logging.info(filtered_data)
+        #(filtered_data)
     for value in filtered_data:
         for values in value['values']:
             mainclient = values.get('mainclient')
@@ -177,23 +176,23 @@ def Query_JSON(json_file_path):
             ats_client_id = values.get('ats_client_id')
             ats_portal_id = values.get('ats_portal_id')
 
-            # #('Fetching details from JSON file...')
-            # #('CID:', cid)
-            # #('Mainclient:', mainclient)
-            # #('Subclient:', subclient)
-            # #('Portal:', portal)
-            # #('Username:', username)
-            # #('Password:', password)
-            # #('Credstatus:', credstatus)
-            # #('Ordercheckstatus:', ordercheckstatus)
-            # #('ATS Client ID:', ats_client_id)
-            # #('ATS Portal ID:', ats_portal_id)
+            #('Fetching details from JSON file...')
+            #('CID:', cid)
+            #('Mainclient:', mainclient)
+            #('Subclient:', subclient)
+            #('Portal:', portal)
+            #('Username:', username)
+            #('Password:', password)
+            #('Credstatus:', credstatus)
+            #('Ordercheckstatus:', ordercheckstatus)
+            #('ATS Client ID:', ats_client_id)
+            #('ATS Portal ID:', ats_portal_id)
             ctypes.windll.kernel32.SetConsoleTitleW(f"{subclient}-Redbell")
             logger_portal(subclient,portal,mainclient)
             headers={}#sending headers to prevent login denied ORSS issue
             if credstatus == 'Active':
                     if(ordercheckstatus=="TMF"):
-                        ##("{}-{} ==> TMF Client => Getting TMF credentials".format(mainclient,subclient))
+                        #("{}-{} ==> TMF Client => Getting TMF credentials".format(mainclient,subclient))
                         logging.info("{}-{} ==> TMF Client => Getting TMF credentials".format(mainclient,subclient))
                         conn = mysql.connector.connect(host="192.168.2.95",database="credentials",user="sam",password="working",buffered=True)
                         if conn.is_connected():
@@ -202,22 +201,22 @@ def Query_JSON(json_file_path):
                             tmfcred = cursor2.fetchone()
                             tmfuser=tmfcred[0]
                             tmfpass=tmfcred[1]
-                            ##(tmfcred)
+                            #(tmfcred)
                             logging.info(tmfcred)
                             try:
                                 tmfdata=tmfcheck(tmfuser,tmfpass)
                             except Exception as e:
-                                ##('Error checking TMF ',e)
+                                #('Error checking TMF ',e)
                                 logging.info('Error checking TMF:{}'.format(e))
                                 tmfdata=None
                         else:
-                            ###('Database connection failed')
+                            #('Database connection failed')
                             logging.info('Database connection failed')
                         conn.close()        
                             
                     else:tmfdata=None
                     
-                    ##('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                    #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
                     logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
                     ###################################################################################
                     try:
@@ -226,28 +225,28 @@ def Query_JSON(json_file_path):
                                             session,cookies=login_toportal(username,cid)
                                             check(session,username,password,cookies,mainclient,subclient,ats_client_id,ats_portal_id,tmfdata,ordercheckstatus,portal,cid)
                                             random_sleep_time = randint(900,1200)
-                                            ##('Next account will be checked after %s seconds' % (random_sleep_time))
+                                            #('Next account will be checked after %s seconds' % (random_sleep_time))
                                             logging.info('Next account will be checked after {} seconds:'.format(random_sleep_time))
                                             time.sleep(random_sleep_time) 
                                 except Exception as ex:
-                                            ##('Unable to login')
-                                            ##('Exception rised ..',ex)
+                                            #('Unable to login')
+                                            #('Exception rised ..',ex)
                                             logging.info('Unable to login')
                                             time.sleep(10)
                             ###################################################################################
                             else:
-                                ##('Portal not added in order updation')
+                                #('Portal not added in order updation')
                                 logging.info('Portal not added in order updation')
                                 
                     except Exception as ex:
-                                    ##('Exception rised ..')
+                                    #('Exception rised ..')
                                     logging.info('Exception rised ..')
                                     time.sleep(10)
             else:
-                ##('Client Inactive in DB')
+                #('Client Inactive in DB')
                 logging.info('Client Inactive in DB')
                 random_sleep_time = randint(900,1200)
-                ##('Next account will be checked after %s seconds' % (random_sleep_time))
+                #('Next account will be checked after %s seconds' % (random_sleep_time))
                 logging.info('Next account will be checked after {} seconds:'.format(random_sleep_time))
                 time.sleep(random_sleep_time) 
                 try:
@@ -255,13 +254,10 @@ def Query_JSON(json_file_path):
 ##                                    success_message = """Hi,\n\nThis is an auto generated mail to inform you that order updation was failed due to BAD PASSWORD!!!!! \nTime: {}\nMain Client: {}\nSubclient: {}\nPortal: {} """.format(str(datetime.datetime.now()), mainclient, subclient, portal)
 ##                                    mail = sender.Mail('smtp.gmail.com','notifications@bpoacceptor.com','$oft@ece2021', 465, use_ssl=True, fromaddr='notifications@bpoacceptor.com')
 ##                                    mail.send_message(subject='Order Updation Failed', to=('redbellorderupdfailed@ecesistech.com', 'tvmcommunicationteam@gmail.com'), body=success_message)
-                            ##('Mail Sent')
-                            ##("Not able to Login {}-{} Account.".format(mainclient, subclient))
-                            logging.info("Mail Sent")
-                            logging.info("Not able to Login {}-{} Account.".format(mainclient, subclient))
+                            #('Mail Sent')
+                            #("Not able to Login {}-{} Account.".format(mainclient, subclient))
                         else:
-                            ##('No need to send mail notification')
-                             logging.info("No need to send mail notification")
+                            #('No need to send mail notification')
                 except Exception as ex:
                         #(ex)
 # json_file_path = 'S:\PORTAL ORDER UPDATION\output_data.json'                                
@@ -271,22 +267,22 @@ def ExceptionMail(portname,cliname,ex):
         mail = sender.Mail('smtp.gmail.com', 'notifications@bpoacceptor.com' , '$oft@ece2021', 465, use_ssl=True,
                                    fromaddr='notifications@bpoacceptor.com')
         
-        ##('Connected to email')
+        #('Connected to email')
         logging.info('Connected to email')
         err_message = """This is an automatic notification:
 Exception in {}'s {} account.
 
 Exception in {}
 """.format(cliname,portname,ex)
-        ##(err_message)
+        #(err_message)
         logging.info(err_message)
 
         mail.send_message(subject=f'{portname} Exception!', to=('teamsoftware@ecesistech.com'), body=err_message)
 
         ##('Exception Mail sent')
-        logging.info('Exception Mail sent')
+        #logging.info('Exception Mail sent')
     except Exception as ex:
-        ##(ex)
+        #(ex)
         logging.info(ex)
 
 def login_toportal(username,cid):
@@ -297,16 +293,14 @@ def login_toportal(username,cid):
         cursor.execute("""SELECT * FROM `redbell` WHERE  `userid` = '{}' LIMIT 1""".format(username))
         result = cursor.fetchone()
         if not result:
-            ##(f'ERROR : userid => {username} is not in DB !!!')
+            #(f'ERROR : userid => {username} is not in DB !!!')
             logging.info(f'ERROR : userid => {username} is not in DB !!!')
             
         else:
-            ##(result)
-            logging.info("result")
+            #(result)
             result['Session_cookie']
             session,resp = checkCookie(result['Session_cookie'])
-            ##(resp.text)
-            logging.info("resp.text")
+            #(resp.text)
             if session:
                 return session,result['Session_cookie']
             else:
@@ -329,7 +323,7 @@ def login_toportal(username,cid):
                       logging.info("cookie fetching failed from https://us-central1-crack-mariner-131508.cloudfunctions.net/Ecesis-Authpp")
                     # ExceptionMail("Redbell Order updation Script",username,f"Status Code-{response.status_code} Please Run the backup Script")
                 if resp['status']=='failed' and resp['cookies']=={}:
-                    ##("Login Failed")  
+                    #("Login Failed")  
                     logging.info("Login Failed")  
                     url = "http://192.168.2.95/uporder/uppython.php?$cid={}".format(cid)
                     r = requests.get(url) 
@@ -355,7 +349,7 @@ def login_toportal(username,cid):
         cnx.close()
                 
     except Exception as e:
-        ##('Exception in login Function---login_toportal() ',e)
+        #('Exception in login Function---login_toportal() ',e)
         logging.info(f"Exception in login Function---login_toportal(){e}")
             
 
@@ -378,7 +372,7 @@ def tempHeaders():
                                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1.0.0.0 Safari/537.36',
                             }
     except Exception as ex:
-        ##('Exception arrises', ex)
+        #('Exception arrises', ex)
         logging.info('Exception arrises : {}'.format(ex))
 
 
@@ -388,14 +382,14 @@ def checkCookie(session_cookie):
     if session_cookie != '':
         data = session_cookie
         cook ='.ASPXAUTH={};'.format(data)
-        ##(cook)
+        #(cook)
         logging.info(cook)
         cookie ={'.ASPXAUTH': session_cookie }
         headers = tempHeaders()
         resp = session.get(url, headers=headers ,cookies=cookie)
         ##(resp.text)
         if 'Profile Information' in resp.text:
-            ##("Session Cookie Active!!!")
+            #("Session Cookie Active!!!")
             session.cookies.set('.ASPXAUTH', data)									  
             logging.info("Session Cookie Active!!!")
             session.headers.update(cookie) #session cookie not getting updated after 'get' request
@@ -438,59 +432,55 @@ def check(session,username,password,cookies,mainclient,subclient,ats_client_id,a
 
             resp2=session.post(inprogurl,data=data,headers=headers)
             inprogorders=json.loads(resp2.content)
-            ##(inprogorders)
+            #(inprogorders)
             for x in inprogorders['dt']['it']:
-                    ##(x)
+                    #(x)
                     logging.info(x)
                     orderid=x['OrderId']
-                    ##('orderid',orderid)
+                    #('orderid',orderid)
                     logging.info('OrderId:{}'.format(orderid))
                     itemid=x['ItemId']
-                    ##('ItemId:',itemid)
+                    #('ItemId:',itemid)
                     logging.info('ItemId:{}'.format(itemid))
                     ordertype=x['ProductDesc']
-                    ##('OrderType:',ordertype)
+                    #('OrderType:',ordertype)
                     logging.info('OrderType:{}'.format(ordertype))
                     address=x['PropAddress']
-                    ##('Address:',address)
+                    #('Address:',address)
                     logging.info('Address:{}'.format(address))
                     ###########################################################################################
                     new=address.split(", ")
-                    ##(new)
-                    logging.info(new)
+                    #(new)
                     zipremoved=new.pop()
-                    ##(zipremoved)
-                    logging.info(zipremoved)
-                    ##(new)####################################################removing comma b/w state and zip
+                    #(zipremoved)
+                    #(new)####################################################removing comma b/w state and zip
                     withoutzip=",".join(new)
-                    ##(withoutzip)
-                    logging.info(withoutzip)
+                    #(withoutzip)
                     addfolder=withoutzip+" "+zipremoved
-                    ##(addfolder)
-                    logging.info(addfolder)
+                    #(addfolder)
                     logging.info('Folder Address:{}'.format(addfolder))
                     newaddfolder=addfolder.replace(",",", ")
-                    ##(newaddfolder)
+                    #(newaddfolder)
                     logging.info('Final Folder Address:{}'.format(newaddfolder))
                     ###########################################################################################
                     #######################################################################
                     portaladdress = re.sub('\s+', ' ', newaddfolder).strip()
-                    ##(portaladdress)
+                    #(portaladdress)
                     logging.info("Org Address: {}".format(portaladdress))
                     zadd=newaddfolder
             ###########################################################################
                     duedate=x['ProductDueDate']
                     duedate=datetime.datetime.strptime(duedate, "%m/%d/%Y %I:%M:%S %p").strftime("%m/%d/%Y %H:%M:%S")
-                    ##('DueDate:',duedate)
+                    #('DueDate:',duedate)
                     logging.info('DueDate:{}'.format(duedate))
                     price=x['VendorFee']
-                    ##('Fees:',price)
+                    #('Fees:',price)
                     logging.info('Fees:={}'.format(price))
                     chck_revision=x['IsRejected']
-                    ##('Revison order=',chck_revision)
+                    #('Revison order=',chck_revision)
                     logging.info('Revison order={}'.format(chck_revision))
                     if(chck_revision == 'Y'):
-                            ##('Revision Order no need to update')
+                            #('Revision Order no need to update')
                             logging.info('Revision order no need to update')
                     else:
                         try:
@@ -501,15 +491,15 @@ def check(session,username,password,cookies,mainclient,subclient,ats_client_id,a
                                 resp3=resp3.text
                                 logging.info('Instuction Response:')
                                 logging.info(resp3)
-                                # #('Instuction Response:')
-                                # #(resp3)
-                                # #('------------------')
+                                #('Instuction Response:')
+                                #(resp3)
+                                #('------------------')
                                 resp3 = HtmlResponse(url="my HTML string", body=(resp3), encoding='utf-8')
                                 instruction=resp3.xpath("//textarea//text()").extract_first()
                                 instruction=html.escape(instruction)
                                 instruction=re.sub('<.*?>','',instruction)
                                 instruction=instruction.replace("\n","").replace("\r","").replace("#","")
-                                ##('instruction',instruction)
+                                #('instruction',instruction)
                                 logging.info('instruction: {}'.format(instruction))
                                 if instruction=='':
                                     logging.info("first condition check")
@@ -548,32 +538,28 @@ def check(session,username,password,cookies,mainclient,subclient,ats_client_id,a
                                         condition,rentalvalue=updateCondition(time.strftime("%m/%d/%Y"),subclient,mainclient,ordertype,address,duedate,portal,price,instruction)
                                         updateATS(zadd,mainclient,subclient,portal,duedate,address,ordertype,ats_portal_id,ats_client_id,price,condition,rentalvalue,instruction)
                                 else:
-                                    ##('instuction not available')
-                                    logging.info('instuction not available')
+                                    #('instuction not available')
                                     instruction="We are not able to update the instruction. Please check the portal."
                             
                         except Exception as e:
-                                ##(e)
+                                #(e)
                                 logging.info(e)
-                                ##('Unable to Fetch condition')
+                                #('Unable to Fetch condition')
                                 logging.info('Unable to Fetch Condition')                            
                             
     else:
-        ##('Bad Password')
+        #('Bad Password')
         logging.info('Bad Password')
         url = "http://192.168.2.95/uporder/uppython.php?$cid={}".format(cid)
         r = requests.get(url)
 
 def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,price,condition):
     try:
-        # #(portal)
-        # #(AssetType)
-        # #(condition)
-        logging.info(portal)
-        logging.info(AssetType)
-        logging.info(condition)
+        #(portal)
+        #(AssetType)
+        #(condition)
         if 'Just Purchased' in condition or 'Borrower purchased' in condition:
-                ##('Check this new instruction')
+                #('Check this new instruction')
                 logging.info('Check this new instruction')
 ##                mail = sender.Mail('smtp.gmail.com', 'notifications@bpoacceptor.com', '$oft@ece2021', 465, use_ssl=True, fromaddr='notifications@bpoacceptor.com')
 ##                success_message = "Hi Team,\n\nNeed to check the instruction is added or not for "+mainclient+' '+subclient+' '+condition
@@ -617,19 +603,18 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                     condit="".join(condit.split())
                     if 'orderinstructions' in condit:
                         condit=condit.replace('orderinstructions','')
-                    ##(condit)
+                    #(condit)
                     try:
                         if 'totalrenovationcost' in condit:
                                      condit=condit.split('-$.')[1]
-                                     ##(condit)
-                                     logging.info(condit)
+                                     #(condit)
                         if ('Total renovation Cost' in condition or 'total renovation cost' in condition) and (condit==condcheck or condit==condcheck2 or condit==condcheck3 or condit==condcheck4):
-                                    ##('Dont proceed with this order') 
+                                    #('Dont proceed with this order') 
                                     condition='Bad'
                         elif (condcheck in condit or condcheck2 in condit or condcheck3 in condit or condcheck4 in condit) and condcheck5 in condit:
                             condition='Bad'                                                                                                                            
                         elif condit==condcheck or condit==condcheck2 or condit==condcheck3 or condit==condcheck4 or condit==condcheck6 or condit==condcheck7 or condit==condcheck8:
-                            ##('Same')
+                            #('Same')
                             condition='Average'
 
                         else:
@@ -639,13 +624,13 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                              
                             condit=''.join([i for i in condition if not i.isdigit()])
                             condit="".join(condit.split())
-                            ##(condit)
+                            #(condit)
                             if condit==condcheck:
-                                ##('Same')
+                                #('Same')
                                 condition='Average' 
                             else:
                              if condition : condition = condition.lower()
-                             ##(condition)
+                             #(condition)
                              cond= condition
                              GOOD = ["Because many of these renovations have been recently completed, these homes may be in superior condition, more typically attributed to C2-C3","The subject has likely been updated or renovated","The subject property is newly constructed and is scheduled for completion at closing in the next few weeks.","the client confirmed they spent the following for the rehab budget","please provide an after renovated value, arv, if the subject is close to one hundred percent complete"]         
                              AVG = ["The client is looking for fair market as is value with a list of needed repairs and an estimated cost to cure. Please do not use distressed comps unless they are the only comps available","The client is looking for fair market as is value. Please do not use distressed comps unless they are the only comps available","Please verify the rent value provided by the client","If you find this property to be located in a gated community or the property is not visible from the street, please obtain photos to confirm of what you can see, upload them to the order, and contact our office","Please ensure you are providing extremely detailed information regarding the subject's current condition. More specifically, there should be commentary provided denoting and deferred maintenance vs. significant issues which require more immediate repairs.","the client provided the following subject information  year built: 0. if you find documented information that differs from the provided characteristics, please use your supported information."]
@@ -667,13 +652,13 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                              else:
                                                 condition = 'New'
                     
-                        ##(condition)
+                        #(condition)
                         logging.info(condition) 
                     except:
                             mail = sender.Mail('smtp.gmail.com', 'notifications@bpoacceptor.com', '$oft@ece2021', 465, use_ssl=True, fromaddr='notifications@bpoacceptor.com')
                             success_message = "Hi Team,\n\nException in "+mainclient+' '+subclient+" RedBell updation"
                             mail.send_message(subject='Exception in RedBell Order Updation!!!', to='teamsoftware@ecesistech.com',body=success_message)
-                            ##('mail send')
+                            #('mail send')
                             logging.info('mail send')
         
         try:
@@ -683,11 +668,11 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                         rentalvalue=cond.split("Client Monthly Rent: ")[1].split(". Client is in process of signing a lease agreement and has asked us to validate the monthly rent.")[0].strip()
                 elif "rent of $" in cond:
                     rentalvalue=cond.split('rent of $')[1].split('.')[0]
-                    ##('Rental Value=',rentalvalue)
+                    #('Rental Value=',rentalvalue)
                     logging.info("Rental Value {}".format(rentalvalue))
                 elif "rent of" in cond:
                     rentalvalue=cond.split('rent of ')[1].split('.')[0]
-                    ##('Rental Value=',rentalvalue)
+                    #('Rental Value=',rentalvalue)
                     logging.info("Rental Value {}".format(rentalvalue))
                     
                 else:
@@ -699,7 +684,7 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                         next_word = list_of_words[list_of_words.index("MONTHLY") + 1]
                         if "RENT" in next_word:
                                 rentalvalue=list_of_words[list_of_words.index("RENT") + 1]
-                                ##(rentalvalue)
+                                #(rentalvalue)
                                 if rentalvalue.isdigit():
                                         rentalvalue=int(rentalvalue)
                                 else:
@@ -711,7 +696,7 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
                         else:
                                 rentalvalue=0
         except Exception as e:
-                ##(e)
+                #(e)
                 logging.info(e)
                 rentalvalue=0
 
@@ -719,49 +704,49 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
         
         localconn = mysql.connector.connect(host='34.70.96.52',database='order_updation',user='order',password='acceptance',autocommit=True,buffered=True)
         if localconn.is_connected():
-                ##('Connected to MySQL database...')
+                #('Connected to MySQL database...')
                 logging.info('Connected to MySQL database...')
                 local_cursor = localconn.cursor()
-                ##("SELECT `id`,`condition` FROM `orders` WHERE (`address` LIKE '{}' AND `client`='{}' AND `subclient` = '{}' AND `portal` = '{}') AND `date` IN ('{}','{}','{}','{}','{}','{}','{}','{}')".format(address,mainclient,subclient,portal,date,tommorrow,prevdate1,prevdate1,prevdate2,prevdate3,prevdate4,prevdate5,prevdate6))
+                #("SELECT `id`,`condition` FROM `orders` WHERE (`address` LIKE '{}' AND `client`='{}' AND `subclient` = '{}' AND `portal` = '{}') AND `date` IN ('{}','{}','{}','{}','{}','{}','{}','{}')".format(address,mainclient,subclient,portal,date,tommorrow,prevdate1,prevdate1,prevdate2,prevdate3,prevdate4,prevdate5,prevdate6))
                 logging.info("SELECT `id`,`condition` FROM `orders` WHERE (`address` LIKE '{}' AND `client`='{}' AND `subclient` = '{}' AND `portal` = '{}') AND `date` IN ('{}','{}','{}','{}','{}','{}','{}','{}')".format(address,mainclient,subclient,portal,date,tommorrow,prevdate1,prevdate1,prevdate2,prevdate3,prevdate4,prevdate5,prevdate6))
                 local_cursor.execute("SELECT `id`,`condition` FROM `orders` WHERE (`address` LIKE '{}' AND `client`='{}' AND `subclient` = '{}' AND `portal` = '{}') AND `date` IN ('{}','{}','{}','{}','{}','{}','{}','{}')".format(address,mainclient,subclient,portal,date,tommorrow,prevdate1,prevdate1,prevdate2,prevdate3,prevdate4,prevdate5,prevdate6))
                 rc = local_cursor.rowcount
-                ##(rc)
+                #(rc)
                 logging.info(rc)
                 if rc > 0:
                         queryRes = local_cursor.fetchall()[0]
                         if rc == 1 and not queryRes[1]:                             #queryRes[1] contains condition field data
-                                ##('Updating Condition to available address...')
+                                #('Updating Condition to available address...')
                                 logging.info('Updating Condition to available address...')
-                                ##("UPDATE `orders` SET `condition` = '{}' where `id` = '{}' AND `date` IN ('{}','{}','{}')".format(condition,queryRes[0],date,tommorrow,prevdate1))
+                                #("UPDATE `orders` SET `condition` = '{}' where `id` = '{}' AND `date` IN ('{}','{}','{}')".format(condition,queryRes[0],date,tommorrow,prevdate1))
                                 logging.info("UPDATE `orders` SET `condition` = '{}' where `id` = '{}' AND `date` IN ('{}','{}','{}')".format(condition,queryRes[0],date,tommorrow,prevdate1))
                                 local_cursor.execute("UPDATE `orders` SET `condition` = '{}' where `id` = '{}' AND `date` IN ('{}','{}','{}')".format(condition,queryRes[0],date,tommorrow,prevdate1))
                         else :
-                                ##("Duplicate Order")
+                                #("Duplicate Order")
                                 logging.info("Duplicate Order")
                                        
                 else:
-                        ##('Creating new entry with condition...')
+                        #('Creating new entry with condition...')
                         logging.info('Creating new entry with condition...')
                         #### CHECKING DUPLICATES#####
-                        ##("SELECT `address` FROM `orders` WHERE `address` = '{}' AND `client` = '{}' AND `portal` = '{}' AND `date` IN ('{}','{}')".format(address,mainclient,portal,date,prevdate1))
+                        #("SELECT `address` FROM `orders` WHERE `address` = '{}' AND `client` = '{}' AND `portal` = '{}' AND `date` IN ('{}','{}')".format(address,mainclient,portal,date,prevdate1))
                         local_cursor.execute("SELECT `address` FROM `orders` WHERE `address` = '{}' AND `client` = '{}' AND `portal` = '{}'".format(address,mainclient,portal,date,prevdate1))
                         logging.info("SELECT `address` FROM `orders` WHERE `address` = '{}' AND `client` = '{}' AND `portal` = '{}'".format(address,mainclient,portal,date,prevdate1))
                         count=len(local_cursor.fetchall())
                         if(count==0):
-                                ##("INSERT INTO `orders`(`date`, `client`, `subclient`, `address`, `duedate`, `portal`, `price`, `type`, `time`, `pic`, `pastdue`,`pastdate`,`status`, `condition`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(date,mainclient,subclient,address,duedate,portal,price,AssetType, datetime.datetime.now(),"No","No","NA","Neworder",condition))
+                                #("INSERT INTO `orders`(`date`, `client`, `subclient`, `address`, `duedate`, `portal`, `price`, `type`, `time`, `pic`, `pastdue`,`pastdate`,`status`, `condition`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(date,mainclient,subclient,address,duedate,portal,price,AssetType, datetime.datetime.now(),"No","No","NA","Neworder",condition))
                                 local_cursor.execute("INSERT INTO `orders`(`date`, `client`, `subclient`, `address`, `duedate`, `portal`, `price`, `type`, `time`, `pic`, `pastdue`,`pastdate`,`status`, `condition`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(date,mainclient,subclient,address,duedate,portal,price,AssetType, datetime.datetime.now(),"No","No","NA","Neworder",condition))
                                 logging.info("INSERT INTO `orders`(`date`, `client`, `subclient`, `address`, `duedate`, `portal`, `price`, `type`, `time`, `pic`, `pastdue`,`pastdate`,`status`, `condition`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(date,mainclient,subclient,address,duedate,portal,price,AssetType, datetime.datetime.now(),"No","No","NA","Neworder",condition))
-                                ##("New order inserted")
+                                #("New order inserted")
                                 logging.info("New order inserted")
                         else:
-                                ##("Order already inserted into DB-----Duplicate")
+                                #("Order already inserted into DB-----Duplicate")
                                 logging.info("Order already inserted into DB-----Duplicate")
                 local_cursor.close()
                 localconn.close()
 
         else:
-                ##('DB Connection Failed')
+                #('DB Connection Failed')
                 logging.info('DB Connection Failed')
         localconn.close()
 
@@ -769,13 +754,13 @@ def updateCondition(date,subclient,mainclient,AssetType,address,duedate,portal,p
     
 
     except Exception as ex:
-                ##('------->',ex)
+                #('------->',ex)
                 logging.info(ex)
                 
 
 def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,price,condition,rentalvalue,instruction):
         client=mainclient+'-'+subclient
-        ##("Order Type",typ)
+        #("Order Type",typ)
         logging.info("Order Type - {}".format(typ))
         logging.info("Due Date - {}".format(due))
         #convert duedate and time to IST ==> Provide duedate - <due> in MM/DD/YYYY H:M:S format
@@ -783,10 +768,10 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
             due = validate_dateTime(due)
             ISTdue = datetime.datetime.strptime(due, "%m/%d/%Y %H:%M:%S") + datetime.timedelta(hours=9,minutes=30)#parse datetime string to datetime object and add required time to it
             ISTdue =datetime.datetime.strftime(ISTdue, "%m/%d/%Y %H:%M:%S")#format datetime object to string
-            ##('IST Due Date',ISTdue)
+            #('IST Due Date',ISTdue)
             logging.info('IST Due Date:{}'.format(ISTdue))
         except Exception as e:
-            ##print(f'Failed to convert duedate ==> {due} to IST')
+            #(f'Failed to convert duedate ==> {due} to IST')
             logging.info('Failed to convert duedate to IST')
         #=====================================================================================
 
@@ -795,23 +780,22 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
 
 
         #=================================================fetching ordewr type from 52  db
-        '''conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
-        cursor = conn.cursor()
-        cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        if(cursor.rowcount>0):
-            typId = cursor.fetchone()[0]
-            #(typId)
-            #("Order Type --{}-- Found".format(typ))
-        else:
-            #("Order Type --{}--  Not Found".format(typ))
-            logging.info("Order Type --{}--  Not Found".format(typ))
-            #("Using Default Type -- 7")
-            logging.info("Using Default Type -- 7")
-            typId = None  
-        cursor.close()
-        conn.close()'''
-
+        # conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
+        # cursor = conn.cursor()
+        # cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # if(cursor.rowcount>0):
+        #     typId = cursor.fetchone()[0]
+        #     #(typId)
+        #     #("Order Type --{}-- Found".format(typ))
+        # else:
+        #     #("Order Type --{}--  Not Found".format(typ))
+        #     logging.info("Order Type --{}--  Not Found".format(typ))
+        #     #("Using Default Type -- 7")
+        #     logging.info("Using Default Type -- 7")
+        #     typId = None  
+        # cursor.close()
+        # conn.close()
         ordertype_json = 'S:\Portal Order Updation App script\order_type.json'
         with open(ordertype_json, 'r') as json_file:
             data_type = json.load(json_file)
@@ -821,32 +805,29 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
                     terms = filedtype_values.split(',')
                     for value in terms : 
                         if value == typ:
-                            ##("ordertype match found from json")
+                            #("ordertype match found from json")
                             logging.info("ordertype match found from json")
                             for values in type_value:    
                                 typId=values.get('typeid') 
                                 if typId is not None:
-                                    ##('typId:', typId)
-                                    logging.info('typId:'.format( typId))
+                                    #('typId:', typId)
                                     break
                                 else:
-                                    ##("typid not found") 
+                                    #("typid not found") 
                                     logging.info("typid not found") 
                             break                    
                         else:
-                            ##("Order Type --{}--  Not Found".format(typ))
+                            #("Order Type --{}--  Not Found".format(typ))
                             logging.info("Order Type --{}--  Not Found".format(typ))
-                            ##("Using Default Type -- 7")
+                            #("Using Default Type -- 7")
                             logging.info("Using Default Type -- 7")
                             typId = None  
                     if typId == None:
-                        ##("Check next set")
-                          logging.info("Check next set")
+                        #("Check next set")
                     else:
                         break
             
-            ##(typId)
-                    
+            #(typId)
         
                 
         adrs = removeHTML.sub('', adrs)
@@ -875,19 +856,19 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
         subchk = trimsubj.replace("~", "   ")
 
         price = non_decimal.sub('', str(price)).strip()
-        ##("Order Price",price)
+        #("Order Price",price)
         logging.info('Order Price:{}'.format(price))
 
         ############checking ELIZABETH NY OR NJ#############
-        ##("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
+        #("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
         logging.info("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
-        ##(clientId)
+        #(clientId)
         logging.info(clientId)
         if clientId=="10742" or clientId=="10743":
                 state=adrs.split()[-2]
-                ##('STATE',state)
+                #('STATE',state)
                 logging.info(state)
-                ##("CHECKING STATE (NY or NJ)")
+                #("CHECKING STATE (NY or NJ)")
                 logging.info("CHECKING STATE (NY or NJ)")
                 if state=="NY":
                     clientId=10742
@@ -898,18 +879,18 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
                     logging.info("CHECK THE ORDER...........")
         ###################################################################################
         if clientId=='97' and (typId=='10' or typId=='12' or typId=='13' or typId=='14' or typId=='17' or typId=='18' or typId=='9' or typId=='4'):
-         ##('Inspection order of Vernon')
+         #('Inspection order of Vernon')
          logging.info('Inspection order of Vernon')
          
         elif typId and zipcode and clientId and portId:
-                ##('Updating Order Details to TFS..........')
+                #('Updating Order Details to TFS..........')
                 logging.info('Updating Order Details to TFS..........')
                 session1 = requests.Session()
                 inputData = "{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~{}~".format(orderid,due,addressTrm,typId,portId,photo,clientId,price,zipcode,auto,subchk,address_copy,
                                                                              ISTdue,condition,rentalvalue)
                 instruction="{}".format(instruction)
                 splinstruction="We are not able to update the instruction. Please check the portal."
-                ##(inputData)
+                #(inputData)
                 logging.info('inputData : {}'.format(inputData))
                 payload={
                      "clientId":clientId,
@@ -917,7 +898,7 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
                      "instructions":instruction,
                      "splInstructions":splinstruction
                     }
-                ##(payload)
+                #(payload)
                 # url="http://13.200.17.36/ecesisapp/ats/Home/AddOrder"
                 url="https://bpotrackers.com/ecesisapp/ats/Home/AddOrder"
                 try:
@@ -925,43 +906,43 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
                 except:
                         session1 = requests.Session()
                         response = session1.post(url,data=payload)
-                ##(response.text)
+                #(response.text)
                 resx=response.text
                 logging.info(resx)
                 if 'Success' not in resx:
-                        ##('Updation Failed..........')
+                        #('Updation Failed..........')
                         logging.info('Updation Failed..........')
                 else:
-                        ##('Successfully updated the order')
+                        #('Successfully updated the order')
                         logging.info('Successfully updated the order')
                         ######################################################################
                         today=DT.now
                         year1=today().strftime('%Y')
                         month=today().strftime('%B')
                         currentdate=today().strftime('%m-%d-%Y')
-                        ##(currentdate)       
+                        #(currentdate)       
                         logging.info("Currentdate {}".format(currentdate))
                         def foldercreation():        
                             folder="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                             os.makedirs(folder)
-                            ##("folder created")
+                            #("folder created")
                             logging.info('folder created')
                         if zadd.__contains__('#') or zadd.__contains__('Union') or zadd.__contains__('UNION') or zadd.__contains__('APT') or zadd.__contains__('apt'):
                             foldercreation()
                         else:
                             trial=zadd.replace(",","")
-                            ##("replaced trial:",trial)
+                            #("replaced trial:",trial)
                             trial=trial.split(" ")           
                             zip=trial[-1]      
                             trial=trial[:2]
                             x=" ".join(trial)
                             trial=x.lower()
-                            ##("folderzip:",zip)
+                            #("folderzip:",zip)
                             logging.info(zip)
-                            ##("foldertrial:",trial) 
+                            #("foldertrial:",trial) 
                             logging.info(trial)              
                             path="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient
-                            ##(os.listdir(path))
+                            #(os.listdir(path))
                             logging.info(os.listdir(path))
                             addfolders=os.listdir(path)
                             for i in addfolders:
@@ -980,47 +961,46 @@ def updateATS(zadd,mainclient,subclient,portal,due,adrs,typ,portId,clientId,pric
                                     old="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+oldaddress
                                     new="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                                     os.rename(old,new)
-                                    ##("Folder renamed")
+                                    #("Folder renamed")
                                     logging.info('folder renamed')
                                     break
                                 elif trial==listadd and typeofzip==False:
                                     old="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+oldaddress
                                     new="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                                     os.rename(old,new)
-                                    ##("Folder renamed")
+                                    #("Folder renamed")
                                     logging.info('folder renamed')
                                     break  
                                 else:
-                                    ##("match not found moving to next address")  
+                                    #("match not found moving to next address")  
                                     logging.info("match not found moving to next address")                
                  
 
-                            ##(addfolders.__contains__(zadd))
+                            #(addfolders.__contains__(zadd))
                             try:
                                 if addfolders.__contains__(zadd)==False:
                                     foldercreation()
                                 else:
-                                    ##("no need to create folder")
+                                    #("no need to create folder")
                                     logging.info("no need to create folder")     
                             except Exception as e:
-                                ##(e)
-                                  logging.info(e)
+                                #(e)
             #####################################################################
         else:
                 if not clientId:
-                    ##('Client Not Active or Unable to Map Client!!')
+                    #('Client Not Active or Unable to Map Client!!')
                     logging.info('Client Not Active or Unable to Map Client!!')
                     if client!="Sharyn" and client!="Sharyn Sharyn" and client!="Sharyn Jenny" and client!="Sharyn Matt" and client!="Matthew Daw":
                         maipping_mailsend('clientname',address_copy,portal,client,typ,'teamsoftware@ecesistech.com','Mapping Failed.... Clientname!')
                 if not zipcode:
-                    ##('Invalid Zipcode!!')
+                    #('Invalid Zipcode!!')
                     logging.info('Invalid Zipcode!!')
                 if not typId:
-                    ##('Unable to map order Type -- {}'.format(typ))
+                    #('Unable to map order Type -- {}'.format(typ))
                     logging.info('Unable to map order Type -- {}'.format(typ))
                     maipping_mailsend('ordertype',address_copy,portal,client,typ,'mapping@ecesistech.com','Mapping Failed.... Order Type!')
                 if not portId:
-                    ##('Unable to map portakl!!')
+                    #('Unable to map portakl!!')
                     logging.info('Unable to map portakl!!')
                         
 
@@ -1029,9 +1009,9 @@ def validate_dateTime(date_text): #function checks if due time is present in dat
         datetime.datetime.strptime(date_text, "%m/%d/%Y %H:%M:%S")
         return date_text
     except ValueError:
-        ##("Incorrect date format, should be MM/DD/YYYY H:M:S")
+        #("Incorrect date format, should be MM/DD/YYYY H:M:S")
         logging.info("Incorrect date format, should be MM/DD/YYYY H:M:S")
-        ##("Appending time to date")
+        #("Appending time to date")
         logging.info("Appending time to date")
         date_text = f'{date_text} 17:00:00'  
         return date_text
@@ -1047,13 +1027,13 @@ def tmfcheck(tmfuser,tmfpass):
             }
     response = session.post(url, data=data)
     if("Invalid Login or Password" not in response.text):
-        ##("Sucess Login to TMF")
+        #("Sucess Login to TMF")
         logging.info("Sucess Login to TMF")
         order=session.get("https://www.trackmyforeclosures.com/members/dashboard/getActive/?sEcho=1&iDisplayStart=0&iDisplayLength=-1")
         order=json.loads(order.text)
         for x in order["aaData"]:
             tmfadd.append(' '.join(x[3].split(",")[0].strip().split(" ")[:-2]))
-        ##(tmfadd)
+        #(tmfadd)
         logging.info(tmfadd)
             
         return tmfadd
@@ -1061,7 +1041,7 @@ def tmfcheck(tmfuser,tmfpass):
           logging.info("Login Faild to TMF")
 
 def conditionsave(condition,mainclient,address):
-        ##(condition)
+        #(condition)
         year=datetime.datetime.now().strftime('%Y')
         month=datetime.datetime.now().strftime('%B')
         date=datetime.datetime.now().strftime('%m-%d-%Y')
@@ -1077,7 +1057,7 @@ def conditionsave(condition,mainclient,address):
                         f.writelines(condition)
                 f.close()
         except Exception as e:
-                ##(e)
+                #(e)
                 logging.info(e)
 
 def condition_mail(address):
@@ -1090,16 +1070,16 @@ def condition_mail(address):
 ##                #(cond_fetch_message)
 ##                logging.info(cond_fetch_message)
 ##                mail.send_message(subject='Condition Fetching Failed!!!', to=('teamsoftware@ecesistech.com'), body=cond_fetch_message)
-                ##('Condition Fetching Failed!!!')
+                #('Condition Fetching Failed!!!')
                 logging.info('Condition Fetching Failed!!!')
         except Exception as e:
-                ##(e)
+                #(e)
                 logging.info(e)
-                ##('Unable to send mail')
+                #('Unable to send mail')
+
 
 json_file_path = 'S:\Portal Order Updation App script\output_data.json'
 def main():
-    
     while True:
         Query_JSON(json_file_path)
 

@@ -29,14 +29,6 @@ import sys
 
 today = datetime.datetime.now()
 
-#ctypes.windll.kernel32.SetConsoleTitleW("OrderUP_CA_SWBC_AMO-Amy_taylor") 
-
-# urllib3_logger = logging.getLogger('urllib3')
-# urllib3_logger.setLevel(logging.CRITICAL)
-# today = DT.now()
-# LOG_FILENAME = "backup\OrderUP_CA_others\Amy_taylor/" + today.strftime('OrderUP_CA_SWBC_AMOLogs--%H_%M_%S_%d_%m_%Y.log')
-# logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
-
 def logger_portal(client_name,portalname,mainclient):
     """This Function is used to Setup logging"""
     path=f"BACKUP//{portalname}//{mainclient}//{client_name}//" #Check path exist
@@ -53,26 +45,6 @@ auto = '0' #is the order auto accepted '0'-Not auto accepted
 #orderid = '1'#dummy value
 
 
-# all_order_types={"CAPI-Exterior.PCR":"13","Exterior DCR":"13","BPO Ext A-Valet":"13","Warrnt Resi Eval Int":"1","DCR-EXT":"13","Disaster PICR - Ext":"13","Disaster PICR - Exterior":"13","Exterior PCR":"4","AVM w/ Ext Photos":"4","Warrnt PICR-AVR Ext":"13","I-EVAL-EXT-PCR":"13","Ext BPO-3 Day Rush":"2","CMA Ext Rush":"2","EXT-PCR":"13","DCR-INT":"10","Interior DCR":"10","Exterior Disaster Condition Report":"13","PCR Exterior":"13","Property Condition Report Exterior":"13","BPO Ext 48-Hour":"2","CAPI-EXT .1":"13","ANX_INT_PCR-AsIs-ARV":"10","CAPI-EXT-PCR":"13","BPO Ext Rush":"2","Interior CMA-5 Day":"1","Exterior BPE-5 Day":"2","Exterior BPO":"2","24HR Rush Exterior BPO":"2","24hr Rush Exterior BPO":"2","Ext BPO-2-Day Rush":"2","Interior BPO":"1", "BPO - Exterior":"2", "BPO - Interior":"1", "Exterior BPO - 5 Day":"2","Exterior BPO-5 Day":"2","Exterior BPO - 5 Day":"2",
-#                  "Interior BPO - 5 Day":"1", "QBPO Interior":"1", "BPOIntRefresh":"1", "BPOIntManual":"1", "BPOIntManualRush":"1","PRR":"13","CAPI-Exterior.1":"13",
-#                  "CMA Interior":"1","CMA Interior SFR":"1", "BPO Interior":"1","QBPO VPS Interior":"1", "QBPO Exterior":"2","Exterior Inspection Report Plus Sold Comps":"13",
-#                  "BPOExtRefresh":"2", "BPOExtManual":"2", "BPOExtManualRush":"2", "CMA Exterior":"2", "CMA Exterior SFR":"2","BPO Exterior":"2", "QBPO VPS Exterior":"2",
-#                  "BPO - Int l Interior":"1","BPO Ext - 1Day":"2","BPO Exterior":"2","BPO Interior":"1","CACommercial Ext BPO":"2","CACommercial Ext CMA":"2",
-#                  "CACommercial Int BPO":"1","CACommercial Int CMA":"1", "CAPI Ext":"18","CAPI Int":"14","CMA - 3 Day Rush":"2", "CMA Ext 4Day":"2","CMA Ext 5Day":"2",
-#                  "CMA Int 1Day":"1",  "CMA Int 2Day":"1",  "Comm Ext BPO Rush":"2",  "Comm Exterior CMA":"2","Comm Interior CMA":"1","Commercial Int BPO":"1",
-#                  "Commerial Ext BPO":"2","EPCR":"4","Ext BPO - 2-Day Rush":"2",  "Ext BPO - 3 Day Rush":"2",  "Ext BPO - 4 Day":"2",  "Ext BPO w/Rent Surv":"2",
-#                  "Ext CMA - 2 Day Rush":"2",  "Ext CMA w/Rent Surv":"2",  "Exterior CMA - 5-Day":"2",  "Int BPO - 2 Day Rush":"1",  "Int BPO - 3 Day Rush":"1",
-#                  "Int BPO w/Rent Surv":"1",  "Int BPO w/Rent Surv2":"1",  "Int CMA - 2 Day Rush":"1",  "Int CMA - 3 Day Rush":"1",  "Int CMA w/Rent Surv":"1",
-#                  "Interior CMA - 5 Day":"1",  "IPCR":"10",  "Q Exterior BPO":"2",  "Q Exterior CMA":"2",  "Q Interior BPO":"1",  "Q Interior CMA":"1",
-#                  "BPO Ext":"2" ,"BPO Ext 24hr":"2" ,"BPO Ext 48hr":"2" ,"BPO Int":"1" ,"BPO Int 24hr":"1" ,"BPO Int 48hr":"1" ,"CMA Ext":"2" ,"BPO Eval":"2",
-#                  "CMA Ext 24hr":"2" ,"CMA Ext 48hr":"2" ,"CMA Int":"1" ,"CMA Int 24hr":"1" ,"CMA Int 48hr":"1" ,"CPCR":"13" ,"PICR Ext":"13" ,
-#                  "PICR Ext 24 hr":"13" ,"PICR Ext 48 hr":"13" ,"PICR Int":"10" ,"PICR Int 24 hr":"10" ,"PICR Int 48 hr":"10" ,"PICR-AV Ext":"13" ,
-#                  "PICR-AV Ext 24 hr":"13" ,"PICR-AV Ext 48 Hr":"13" ,"PICR-AV Int":"10" ,"PICR-AV Int 24 Hr":"10" ,"PICR-AV Int 48 hr":"10" ,
-#                  "PICR-LSDesktop Ext":"13" ,"PICR-LSDesktop Int":"10" ,"PICR-SureVal Ext":"13" ,"PICR-SureVal Int":"10","PICR  - Exterior":"4","Commercial PICR Int":"10",
-#                  "BPO Ext No Rush":"2","PICR - Interior":"10","PICR-AVR Ext":"13","Exterior Property Condition Report":"4","Warranted PICR Ext":"13",
-#                  "Commercial PICR - Exterior":"13","Q Exterior CMA":"2","CMA Ext No Rush":"2","PICR - Exterior":"13","Inspection Report Plus":"13",
-#                  "CAPI-EXT-PCR":"13","Commercial Basic PICR - Exterior":"4","Comm Basic PICR Ext":"17","Interior BPO-5 Day":"1","Commercial Ext BPO":"6","Exterior CMA-5-Day":"2","Ext CMA-2 Day Rush":"2","Commercial Ext CMA":"6","Commercial PICR Ext":"4",
-#                  "Residential Eval Ext":"2","BPO Int No Rush":"1","PICR Ext MTS":"4","PICR Int MTS":"10"}
 
                  
 removeHTML = re.compile('<.*?>')#remove HTML tags from address string
@@ -143,8 +115,7 @@ def date_to_IST(due):#convert duedate and time to IST ==> Provide duedate - <due
         logging.info('IST Due Date {}'.format(ISTdue))
         return ISTdue
     except Exception as e:
-        #(f'Failed to convert duedate ==> {due} to IST')
-         logging.info('Failed to convert duedate ==> {due} to IST')
+        logging.info('Failed to convert duedate ==> {due} to IST')
         
 #=====================================================================================
     
@@ -179,22 +150,22 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
         
         #----------------------------------fetchinb from db
         
-        '''conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
-        cursor = conn.cursor()
-        cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        if(cursor.rowcount>0):
-            typId = cursor.fetchone()[0]
-            #(typId)
-            #("Order Type --{}-- Found".format(typ))
-        else:
-            #("Order Type --{}--  Not Found".format(typ))
-            logging.info("Order Type --{}--  Not Found".format(typ))
-            #("Using Default Type -- 7")
-            logging.info("Using Default Type -- 7")
-            typId = None  
-        cursor.close()
-        conn.close()'''
+        # conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
+        # cursor = conn.cursor()
+        # cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # if(cursor.rowcount>0):
+        #     typId = cursor.fetchone()[0]
+        #     #(typId)
+        #     #("Order Type --{}-- Found".format(typ))
+        # else:
+        #     #("Order Type --{}--  Not Found".format(typ))
+        #     logging.info("Order Type --{}--  Not Found".format(typ))
+        #     #("Using Default Type -- 7")
+        #     logging.info("Using Default Type -- 7")
+        #     typId = None  
+        # cursor.close()
+        # conn.close()
         ordertype_json = 'S:\Portal Order Updation App script\order_type.json'
         with open(ordertype_json, 'r') as json_file:
             data_type = json.load(json_file)
@@ -222,21 +193,11 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
                             logging.info("Using Default Type -- 7")
                             typId = None  
                     if typId == None:
-                        #("Check next set")
-                         logging.info("Check next set")
+                       logging.info("Check next set")
                     else:
                         break
             
             #(typId)
-
-        # if typ in all_order_types:
-        #         typId = all_order_types[typ]
-        # else:
-        #         #("Order Type -- {} --  Not Found".format(typ))
-        #         logging.info("Order Type -- {} --  Not Found".format(typ))
-        #         #("Using Default Type -- 7")
-        #         logging.info("Using Default Type -- 7")
-        #         typId = None
                 
         adrs = removeHTML.sub('', adrs)
         
@@ -307,7 +268,7 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
                      "splInstructions":splinstruction
                     }
                 #(payload)
-                #url="http://13.200.17.36/ecesisapp/ats/Home/AddOrder"
+                # url="http://13.200.17.36/ecesisapp/ats/Home/AddOrder"
                 url="https://bpotrackers.com/ecesisapp/ats/Home/AddOrder"
                 try:
                         response = session.post(url,data=payload)
@@ -393,8 +354,7 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
                                     #("no need to create folder")
                                     logging.info("no need to create folder")
                             except Exception as e:
-                                #(e)
-                                 logging.info(e)
+                                logging.info(e)
             #####################################################################
         else:
                 if not clientId:
@@ -418,61 +378,63 @@ def updateATS(zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,instruc
         logging.info(f"Exception in updateATS: {ex}")
 
 ##############################################
-# def zillowfunc(folderadd):        
-#                     portaladdress = re.sub('\s+', ' ', folderadd).strip()
-#                     #(portaladdress)
-#                     logging.info("Org Address: {}".format(portaladdress))
-#                     headers = {
-#                     'authority': 'www.zillow.com',
-#                     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-#                     'accept-language': 'en-US,en;q=0.9',
-#                     'referer': 'https://www.zillow.com/?utm_medium=cpc&utm_source=google&utm_content=1471764169|65545421228|kwd-570802407|603457706088|&semQue=null&gclid=Cj0KCQiAvqGcBhCJARIsAFQ5ke7rTk7RocXIajKTxmwHqUem5wp2SK8MNa7zoXF8uTE0ppY1lLn4JW8aArpKEALw_wcB',
-#                     'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
-#                     'sec-ch-ua-mobile': '?0',
-#                     'sec-ch-ua-platform': '"Windows"',
-#                     'sec-fetch-dest': 'document',
-#                     'sec-fetch-mode': 'navigate',
-#                     'sec-fetch-site': 'same-origin',
-#                     'sec-fetch-user': '?1',
-#                     'upgrade-insecure-requests': '1',
-#                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-#                     }
-#                     zilladdress=folderadd.replace(',','')
-#                     zilladdress=zilladdress.replace(' ','-')
-#                     #(zilladdress)
-#                     logging.info('Zaddress1 : {}'.format(zilladdress))
+def zillowfunc(folderadd):        
+                    portaladdress = re.sub('\s+', ' ', folderadd).strip()
+                    #(portaladdress)
+                    logging.info("Org Address: {}".format(portaladdress))
+                    zadd=folderadd
+                    return zadd
+                    '''headers = {
+                    'authority': 'www.zillow.com',
+                    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    'accept-language': 'en-US,en;q=0.9',
+                    'referer': 'https://www.zillow.com/?utm_medium=cpc&utm_source=google&utm_content=1471764169|65545421228|kwd-570802407|603457706088|&semQue=null&gclid=Cj0KCQiAvqGcBhCJARIsAFQ5ke7rTk7RocXIajKTxmwHqUem5wp2SK8MNa7zoXF8uTE0ppY1lLn4JW8aArpKEALw_wcB',
+                    'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
+                    'sec-ch-ua-mobile': '?0',
+                    'sec-ch-ua-platform': '"Windows"',
+                    'sec-fetch-dest': 'document',
+                    'sec-fetch-mode': 'navigate',
+                    'sec-fetch-site': 'same-origin',
+                    'sec-fetch-user': '?1',
+                    'upgrade-insecure-requests': '1',
+                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+                    }
+                    zilladdress=folderadd.replace(',','')
+                    zilladdress=zilladdress.replace(' ','-')
+                    #(zilladdress)
+                    logging.info('Zaddress1 : {}'.format(zilladdress))
 
-#                     url='https://www.zillow.com/homes/{}_rb/'.format(zilladdress)
+                    url='https://www.zillow.com/homes/{}_rb/'.format(zilladdress)
             
-#                     response = requests.get(url,headers=headers)
-#                     response =response.text
-#                     response = HtmlResponse(url="my HTML string", body=response, encoding='utf-8')
-#                     zadd=response.xpath('/html/head/title/text()').extract_first()
-#                     #("portaladdress",portaladdress)
-#                     logging.info('portaladdress : {}'.format(portaladdress))
+                    response = requests.get(url,headers=headers)
+                    response =response.text
+                    response = HtmlResponse(url="my HTML string", body=response, encoding='utf-8')
+                    zadd=response.xpath('/html/head/title/text()').extract_first()
+                    #("portaladdress",portaladdress)
+                    logging.info('portaladdress : {}'.format(portaladdress))
 
-#                     #(zadd)
-#                     logging.info('Zillowaddress1 : {}'.format(zadd))
+                    #(zadd)
+                    logging.info('Zillowaddress1 : {}'.format(zadd))
             
 
-#                     if zadd == None or zadd=='Access to this page has been denied':
-#                         zadd=folderadd                         
-#                     zadd=zadd.split('| Zillow')[0]
-#                     zadd=zadd.split('- Apartments for Rent')[0]
-#                     zadd=zadd.split('| MLS')[0]
-#                     #(zadd)
+                    if zadd == None or zadd=='Access to this page has been denied':
+                        zadd=folderadd                         
+                    zadd=zadd.split('| Zillow')[0]
+                    zadd=zadd.split('- Apartments for Rent')[0]
+                    zadd=zadd.split('| MLS')[0]
+                    #(zadd)
 
-#                     zadd1=zadd.split(' ')[-1]
-#                     subadd=zadd.split(' ')[:-1]
-#                     subadd=" ".join(subadd)
-#                     #("subadd:",subadd)
-#                     if zadd1.__contains__("-"):
-#                         zadd1=zadd1.split('-')[0]
-#                         zadd= subadd+ " "+zadd1
-#                         #(zadd)
-#                     logging.info('Zillowaddress : {}'.format(zadd))
-#                     return zadd
-#             ###################################################################
+                    zadd1=zadd.split(' ')[-1]
+                    subadd=zadd.split(' ')[:-1]
+                    subadd=" ".join(subadd)
+                    #("subadd:",subadd)
+                    if zadd1.__contains__("-"):
+                        zadd1=zadd1.split('-')[0]
+                        zadd= subadd+ " "+zadd1
+                        #(zadd)
+                    logging.info('Zillowaddress : {}'.format(zadd))
+                    return zadd'''
+            ###################################################################
 
 def check(mainclient,session, resp, Mainclient, Subclient, portal, cid, ats_client_id, ats_portal_id,link):
         client=Mainclient+'-'+Subclient
@@ -504,8 +466,8 @@ def check(mainclient,session, resp, Mainclient, Subclient, portal, cid, ats_clie
                     folderadd= '{}, {}, {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
                     #(folderadd)
                     logging.info(folderadd)
-                    address_value = folderadd
                     # address_value=zillowfunc(folderadd) ###calling function to get the zillow address
+                    address_value=folderadd
                     orderid= o['OrderID']
                     AssetType= o['Product']
                     Fee=o['VendorFee']
@@ -561,108 +523,95 @@ def check(mainclient,session, resp, Mainclient, Subclient, portal, cid, ats_clie
             logging.info('Bad Password')
 
 #---------------------------------------------------------------------------------------#
-def checkAMO(mainclient,username,password,cid,ats_client_id,ats_portal_id,portal,client):
-        session = requests.Session()
-        url="https://valvp.amoservices.com/Account/Login?object=form-horizontal%20well"
-        response = session.post(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        tokken_new = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
-        #(tokken_new)
-        headers = {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Cache-Control': 'max-age=0',
-                'Connection': 'keep-alive',
-                'Content-Length': '62',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Host': 'valvp.amoservices.com',
-                'Origin': 'https://valvp.amoservices.com',
-                'Referer': 'https://valvp.amoservices.com/Account/Login',
-                'Upgrade-Insecure-Requests': '1',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'
+     
+
+
+
+def login_toportal(username,password,session):
+    link = "https://swbcls-vendors.clearvalueconsulting.com"
+    try:
+        # session = requests.session()
+        # #(session)
+        url='https://swbcls-vendors.clearvalueconsulting.com/Account/Logout'
+        headers={
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Cache-Control': 'max-age=0',
+                    'Connection': 'keep-alive',                
+                    'Host': 'swbcls-vendors.clearvalueconsulting.com',
+                    'Referer': 'https://swbcls-vendors.clearvalueconsulting.com/Account/Login?ReturnUrl=%2fAccount%2fLogout',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'same-origin',
+                    'Sec-Fetch-User': '?1',
+                    'Upgrade-Insecure-Requests': '1',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'
+
                 }
+        resp = session.get(url,headers=headers)
+        #(resp)
+        soup = BeautifulSoup(resp.content, 'html.parser')
+        tokken = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
+        #(tokken)
+        url = link+"/Account/Login?ReturnUrl=%2f"
         data = {
-                '__RequestVerificationToken': tokken_new,
-                'Username': username,
-                'Password': password,
-                'singlebutton': ''
-                }
-
-        response = session.post(url,headers=headers,data=data)
-
-        if f"You are logged in as: {username}" in response.text:
-            #("Success Login")
-            logging.info("Success Login")
-            link = 'https://valvp.amoservices.com/Orders/PendingOrders?_search=false&nd=1597842601622&rows=-1&page=1&sidx=&sord=asc'
-            ord_headers = {
-                "Accept":"application/json, text/plain, */*",
-                "Accept-Encoding":"gzip, deflate, br",
-                "Accept-Language":"en-US,en;q=0.9",
-                "Cache-Control":"max-age=0",
-                "Connection":"keep-alive",
-                "Host":"valvp.amoservices.com",
-                "Referer":"https://valvp.amoservices.com/",
-                "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
-                }
-
-            
-            ord_resp = session.get(link,headers=ord_headers)
-            #(ord_resp.text)
-            logging.info(ord_resp.text)
-            response1=json.loads(ord_resp.text)
-            details=response1['rows']
-            #('Orders in progress: {}'.format(len(details)))
-            logging.info('Orders in progress: {}'.format(len(details)))
-            for o in details:
-                try:
-                    address= '{} {} {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
-                    folderadd= '{}, {}, {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
-                    #(folderadd)
-                    logging.info(folderadd)
-                    address_value = folderadd                 
-                    #address_value=zillowfunc(folderadd) ###calling the function "zillowfunc" function to get the zillow address
-                    
-                    AssetType= o['Product']
-                    Fee=o['VendorFee']
-                    orderid=o['OrderID']
-                    s_time = re.sub("\D", '', o['DueDate'])
-                    duedate = datetime.datetime.fromtimestamp(float(s_time) / 1000).strftime('%m/%d/%Y')
-                    orderitemid=o['OrderItemID']
-                    engagementDocumentId=o['EngagementDocumentID']
-                    #(address,AssetType,Fee,duedate,orderid,orderitemid)
-                    logging.info(address,AssetType,Fee,duedate,orderid,orderitemid)
-                    link1="https://valvp.amoservices.com"
-                    pendordersurl=link1+"/Orders/"+str(orderid)+"/Items/"+str(orderitemid)+"/Documents/"+str(engagementDocumentId)
-                    pendingordersurl =session.get(pendordersurl)
-                    #(pendingordersurl.text)
-                    tresp1 = HtmlResponse(url="my HTML string", body=(pendingordersurl.text).replace("', '","").replace("&nbsp;","").replace("\t","").replace("\r\n","").replace("Loading....",""), encoding='utf-8')
-                    res1=tresp1.text
-                    try:
-                        instruction=str(res1).split('ORDER INSTRUCTIONS')[1].split('STATE MANAGEMENT LICENSE:')[0]
-                        instruction=re.sub('<.*?>','',instruction)
-                        instruction=str(instruction)
-                    except Exception as E:
-                        #("Exception in Instruction is",E)
-                        instruction="We are not able to update the instruction. Please check the portal."
-                    #('instruction',instruction)
-                    logging.info('instruction: {}'.format(instruction))
-                    
-                    updateATS(address_value,mainclient,orderid,duedate,address,AssetType,ats_portal_id,ats_client_id,Fee,instruction,portal,client)
-             
-                except Exception as ex:
-                    #('exception here')
-                    logging.info('exception here')
-                    #(ex)
-                    logging.info(ex)
-        else:
-            url = "http://192.168.2.95/uporder/uppython.php?$cid={}".format(cid)
-            r = requests.get(url)
-            #('Bad Password')
-            logging.info('Bad Password')
+                '__RequestVerificationToken':tokken,
+                'Username':username,
+                'Password':password,
+                'singlebutton':''
+        }
+        headers = {
+                    'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+                    'Accept-Encoding':'gzip, deflate, br',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Cache-Control': 'max-age=0',
+                    'Connection': 'keep-alive',
+                    'Content-Length': '66',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Host': link.replace("https://",""),
+                    'Origin': link,
+                    'Referer': link+'/Account/Login?ReturnUrl=%2f',
+                    'Upgrade-Insecure-Requests': '1',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36ari/537.36'
+                    }
         
+        resp = session.post(url, data=data,headers=headers)
+        return session,resp,link
 
-
+    except Exception as e:
+        logging.info(e)
+  
+def checkproxy_country(username,password,ip_address):
+        session=requests.session()
+        if '9000' in ip_address:
+            proxies = {'http': 'http://{}'.format(ip_address),
+                   'https': 'http://{}'.format(ip_address)
+                   }
+            ip_address=ip_address.split(':')[0]
+        session.proxies.update(proxies)
+        ip_test_url1="https://customer.api.drift.com/geo/v2"
+        ipapify = session.get(ip_test_url1, proxies=proxies)
+        ipadress=json.loads(ipapify.text)['ip']
+        country=json.loads(ipapify.text)['country']
+        #(country)
+        logging.info(f"session IP {ipadress}")
+        logging.info(f"Database IP {ip_address}")
+        #(f"session IP {ipadress}")
+        #(f"Database IP {ip_address}")
+        if ip_address == ipadress: # Cross checking IP in DB with current session IP after updating proxy with Luminati
+                #(f"Database IP matched with the session IP {ipadress}")
+                logging.info(f"Database IP matched with the session IP {ipadress}")
+                if country == "US": # Just make sure login from USA
+                        #('Country identified as USA')
+                        logging.info('Country identified as USA')
+                        #('Try to login and update orders if any')
+                        logging.info('Try to login and update orders if any')
+                        return country,session
+        else:
+            #('IP not matching..')
+            logging.info('IP not matching..')
+            return 
 
 #--------------------------Main Function-------------------------------------------------# 
 def Query_JSON(json_file_path):
@@ -670,7 +619,7 @@ def Query_JSON(json_file_path):
         data = json.load(json_file)
         cid = sys.argv[1]
         cid=int(cid)
-        #cid = 5871
+        # cid = 7323
         filtered_data = [entry for entry in data if entry.get("filedtype") == cid]
         #(filtered_data)
     for value in filtered_data:
@@ -684,6 +633,7 @@ def Query_JSON(json_file_path):
             ordercheckstatus = values.get('ordercheckstatus')
             ats_client_id = values.get('ats_client_id')
             ats_portal_id = values.get('ats_portal_id')
+            ip_address = values.get('ip_address')
 
             #('Fetching details from JSON file...')
             #('CID:', cid)
@@ -695,67 +645,59 @@ def Query_JSON(json_file_path):
             #('Credstatus:', credstatus)
             #('Ordercheckstatus:', ordercheckstatus)
             #('ATS Client ID:', ats_client_id)
-            #('ATS Portal ID:', ats_portal_id)
+            #('ip_address:', ip_address)
+            ctypes.windll.kernel32.SetConsoleTitleW(f"{subclient}-SWBC")
             logger_portal(subclient,portal,mainclient)
             headers={}#sending headers to prevent login denied ORSS issue
-            client=mainclient+'-'+subclient
             if credstatus == 'Active':                            
-                    #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
-                    logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
-                    ###################################################################################
-                    try:
-                            
-                            
-                            if portal == "CA":
-                                    #("Trying to Log in CA portal")
-                                    logging.info("Trying to Log in CA portal")
-                                    session = requests.session()
-                                    cookies = requests.utils.dict_from_cookiejar(session.cookies)
-                                    url = "https://vendors.ca-usa.com/Account/Login?ReturnUrl=%2fOrders%2fDashboard"
-                                    link = "https://vendors.ca-usa.com"
-                                    resp = session.post(url)
-                                    soup = BeautifulSoup(resp.content, 'html.parser')
-                                    tokken = soup.find('input', {'name': '__RequestVerificationToken'}).get('value')
-                                    data = {
-                                            '__RequestVerificationToken': tokken,
-                                            'Username': username,
-                                            'Password': password,
-                                            'singlebutton:': ''
-                                            }
-                                    resp = session.post(url,data=data)
-                                    check(mainclient,session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,link)
-                                    random_sleep_time = randint(900,1200)
-                                    #('Next account will be checked after %s seconds' % (random_sleep_time))
-                                    logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
-                                    time.sleep(random_sleep_time) 
-                            
+                            #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                            logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                            ###################################################################################
+                            try:
+                                    
+                                    if portal == 'SWBC':
+                                                
+                                                country,session=checkproxy_country(username,password,ip_address)
+                                                if country == "US":
+                                                    session,resp,link=login_toportal(username,password,session)
+                                                    check(mainclient,session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,link)#pass ATS ID's
+                                                    random_sleep_time = randint(900,1200)
+                                                    #('Next account will be checked after %s seconds' % (random_sleep_time))
+                                                    logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                                                    time.sleep(random_sleep_time) 
+                                                    #('Unable to login')
+                                                    logging.info('Unable to login')
+                                                    time.sleep(10)
+
+
+                                    else:
+                                            #('Portal not added in order updation')
+                                            logging.info('Portal not added in order updation')    
+
+                                            
                                         
-                            else:
-                                #('Portal not added in order updation')
-                                logging.info('Portal not added in order updation')
-                                
-                    except Exception as ex:
-                                    #('Exception raised ..')
-                                    logging.info('Exception raised ..')
-                                    #(ex)
-                                    logging.info(ex)
-                                    time.sleep(10)
+                            except Exception as ex:
+                                            #('Exception raised ..')
+                                            logging.info('Exception raised ..')
+                                            #(ex)
+                                            logging.info(ex)
+                                            time.sleep(10)
             else:
-                #('Bad Password')
-                logging.info('Bad Password')
-                random_sleep_time = randint(900,1200)
-                #('Next account will be checked after %s seconds' % (random_sleep_time))
-                logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
-                time.sleep(random_sleep_time)
-# json_file_path = 'S:\PORTAL ORDER UPDATION\output_data.json'
-# Query_JSON(json_file_path)                             
-            
+                        #('Bad Password')
+                        logging.info('Bad Password')
+                        random_sleep_time = randint(900,1200)
+                        #('Next account will be checked after %s seconds' % (random_sleep_time))
+                        logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
+                        time.sleep(random_sleep_time)
                                 
-#---------------------------------------------------------------------------------------#
 json_file_path = 'S:\Portal Order Updation App script\output_data.json'
+# Query_JSON(json_file_path)     
+#---------------------------------------------------------------------------------------#
+
 def main():
-    while True:
-        Query_JSON(json_file_path)
+        while True:
+                Query_JSON(json_file_path)
+
 
 
 if __name__ == '__main__':main()

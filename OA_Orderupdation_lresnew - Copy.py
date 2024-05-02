@@ -37,7 +37,7 @@ def logger_portal(client_name,portalname,mainclient):
     logging.getLogger("PIL.PngImagePlugin").setLevel(logging.WARNING)
     logging.getLogger().propagate=False
 def conditionUpdate(orderid,session,engagement_document_id):
-     #print("sucess",engagement_document_id)
+     #("sucess",engagement_document_id)
      try:
           #(orderid)
           headers = {
@@ -60,22 +60,22 @@ def conditionUpdate(orderid,session,engagement_document_id):
           instrResponse = session.get("https://vendor-genesis.lres.com/Orders/{}/Items/1".format(orderid))
           #("instrResponse :",instrResponse.text)
           instrResponse1 = session.get("https://vendor-genesis.lres.com/Orders/{}/Items/1/Documents/{}".format(orderid,engagement_document_id))
-          #("instrResponse1 :",instrResponse1.text)
+          #print("instrResponse1 :",instrResponse1.text)
           #("****************************************************************************")
           #keyWord1 = "Assignment requires 12 comps in total"
           #KeyWord1 = "Verdana_MSFontService"
           if "Assignment requires 12 comps in total" in instrResponse.text:
                condition = "Bad"
                logging.info(condition)
-               ##("Condition1:",condition)
+               #("Condition1:",condition)
           elif "Assignment requires 12 comps in total" in instrResponse1.text:
                condition = "Bad"
                logging.info(condition)
-               ##("Condition2:",condition)
+               #("Condition2:",condition)
           else:
                condition = 'Average'
                logging.info(condition)
-               ##("Condition3:",condition)
+               #("Condition3:",condition)
           #("Condition:",condition)     
           #exit()
           return condition
@@ -89,10 +89,10 @@ def mapping_mailsend(p,address,portal,client,ordertype,to,subject):
         ordertpe_message = 'We are unable to identify the {} for the following order\n\n Address: {} \n Portal: {} \n Client: {} \n Order Type {}'.format(p,address,portal,client,ordertype)
         mail = sender.Mail('smtp.gmail.com','notifications@bpoacceptor.com','$oft@ece2021', 465, use_ssl=True,fromaddr='notifications@bpoacceptor.com')
         mail.send_message(subject=subject, to=to,body=ordertpe_message)
-        ##('Mapping issue reported')
+        #('Mapping issue reported')
         logging.info('Mapping issue reported')
     except Exception as e:
-        ##(e)
+        #(e)
         logging.error(e)
 
 
@@ -100,12 +100,11 @@ def date_to_IST(due):#convert duedate and time to IST ==> Provide duedate - <due
     try:
         ISTdue = datetime.datetime.strptime(due, "%m/%d/%Y %H:%M:%S") + datetime.timedelta(hours=9,minutes=30)#parse datetime string to datetime object and add required time to it
         ISTdue = datetime.datetime.strftime(ISTdue, "%m/%d/%Y %H:%M:%S")#format datetime object to string
-        ##('IST Due Date',ISTdue)
+        #('IST Due Date',ISTdue)
         logging.info('IST Due Date {}'.format(ISTdue))
         return ISTdue
     except Exception as e:
-        ##(f'Failed to convert duedate ==> {due} to IST')
-        logging.info('Failed to convert duedate {}'.format(ISTdue))
+       logging.info(f'Failed to convert duedate ==> {due} to IST')
         
 #=====================================================================================
     
@@ -115,9 +114,9 @@ def validate_dateTime(date_text): #function checks if due time is present in dat
         datetime.datetime.strptime(date_text, "%m/%d/%Y %H:%M:%S")
         return date_text
     except ValueError:
-        ##("Incorrect date format, should be MM/DD/YYYY H:M:S")
+        #("Incorrect date format, should be MM/DD/YYYY H:M:S")
         logging.info("Incorrect date format, should be MM/DD/YYYY H:M:S")
-        ##("Appending time to date")
+        #("Appending time to date")
         logging.info("Appending time to date")
         date_text = f'{date_text} 17:00:00'  
         return date_text
@@ -125,36 +124,35 @@ def validate_dateTime(date_text): #function checks if due time is present in dat
 def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId,clientId,price,portal,client,session):
     try:
 
-        ##("Order Type",typ)
+        #("Order Type",typ)
         logging.info("Order Type:{}".format(typ))
         due = validate_dateTime(due)
-        ##(due)
+        #(due)
         ISTdue = date_to_IST(due)
 
-        ##("Due Date",due)
+        #("Due Date",due)
         logging.info("Due Date:{}".format(due))
         if not price: price="0"
         ##########Dummy value#########
         
 
         #################################################################################################
-        '''conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
-        cursor = conn.cursor()
-        cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
-        if(cursor.rowcount>0):
-            typId = cursor.fetchone()[0]
-            #(typId)
-            #("Order Type --{}-- Found".format(typ))
-        else:
-            #("Order Type --{}--  Not Found".format(typ))
-            logging.info("Order Type --{}--  Not Found".format(typ))
-            #("Using Default Type -- 7")
-            logging.info("Using Default Type -- 7")
-            typId = None  
-        cursor.close()
-        conn.close()'''
-
+        # conn = mysql.connector.connect(host="34.70.96.52",database="order_updation",user="order",password="acceptance",buffered=True)
+        # cursor = conn.cursor()
+        # cursor.execute("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # #("""SELECT typeid, type FROM tfstypeid WHERE FIND_IN_SET('{}', type)""".format(typ))
+        # if(cursor.rowcount>0):
+        #     typId = cursor.fetchone()[0]
+        #     #(typId)
+        #     #("Order Type --{}-- Found".format(typ))
+        # else:
+        #     #("Order Type --{}--  Not Found".format(typ))
+        #     logging.info("Order Type --{}--  Not Found".format(typ))
+        #     #("Using Default Type -- 7")
+        #     logging.info("Using Default Type -- 7")
+        #     typId = None  
+        # cursor.close()
+        # conn.close()
         ordertype_json = 'S:\Portal Order Updation App script\order_type.json'
         with open(ordertype_json, 'r') as json_file:
             data_type = json.load(json_file)
@@ -164,32 +162,29 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
                     terms = filedtype_values.split(',')
                     for value in terms : 
                         if value == typ:
-                            ##("ordertype match found from json")
+                            #("ordertype match found from json")
                             logging.info("ordertype match found from json")
                             for values in type_value:    
                                 typId=values.get('typeid') 
                                 if typId is not None:
-                                    ##('typId:', typId)
-                                    logging.info(typId)
+                                    #('typId:', typId)
                                     break
                                 else:
-                                    ##("typid not found") 
+                                    #("typid not found") 
                                     logging.info("typid not found") 
                             break                    
                         else:
-                            ##("Order Type --{}--  Not Found".format(typ))
+                            #("Order Type --{}--  Not Found".format(typ))
                             logging.info("Order Type --{}--  Not Found".format(typ))
-                            ##("Using Default Type -- 7")
+                            #("Using Default Type -- 7")
                             logging.info("Using Default Type -- 7")
                             typId = None  
                     if typId == None:
-                        ##("Check next set")
                         logging.info("Check next set")
                     else:
                         break
             
-            ##(typId)
-
+            #(typId)
         adrs = removeHTML.sub('', adrs)
         
         adrs = re.sub('\s+', ' ', adrs).strip()
@@ -221,24 +216,24 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
         logging.info("Order Price:{}".format(price))
 
         ############checking ELIZABETH NY OR NJ#############
-        ##("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
+        #("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
         logging.info("CHECKING WHETHER ORDER ACCEPTED FOR MATTHEW-ELIZABETH NY OR MATTHEW-ELIZABETH NJ............")
-        ##(clientId)
+        #(clientId)
         logging.info(clientId)
         
         #clientId=clientId.strip()
         if clientId=="10742" or clientId=="10743":
                 state=adrs.split()[-2]
-                ##('STATE',state)
+                #('STATE',state)
                 logging.info(state)
-                ##("CHECKING STATE (NY or NJ)")
+                #("CHECKING STATE (NY or NJ)")
                 logging.info("CHECKING STATE (NY or NJ)")
                 if state=="NY":
                     clientId=10742
                 elif state=="NJ":
                     clientId=10743
                 else:
-                    ##("CHECK THE ORDER...........")
+                    #("CHECK THE ORDER...........")
                     logging.info("CHECK THE ORDER...........")
         ###################################################################################
         if clientId=='97' and (typId=='10' or typId=='12' or typId=='13' or typId=='14' or typId=='17' or typId=='18' or typId=='9' or typId=='4'):
@@ -247,7 +242,7 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
         
         elif typId and zipcode and clientId and portId:
                  condition = conditionUpdate(orderid,session,engagement_document_id)
-                 ##('Updating Order Details to TFS..........')
+                 #('Updating Order Details to TFS..........')
                  logging.info('Updating Order Details to TFS..........')
                  rentalvalue=0
                  instruction="We are not able to update the instruction. Please check the portal."
@@ -261,8 +256,7 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
                       "instructions":instruction,
                       "splInstructions":splinstruction
                      }
-                 ##(payload)
-                 logging.info(payload)
+                 #(payload)
                  #url="http://43.205.191.132/ecesisapp/ats/Home/AddOrder"#testtfsurl
                  url="https://bpotrackers.com/ecesisapp/ats/Home/AddOrder"
                  try:
@@ -270,45 +264,45 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
                  except:
                         session = requests.Session()
                         response = session.post(url,data=payload)
-                 ##(response.text)
+                 #(response.text)
                  resx=response.text
                  logging.info(resx)
 
                  if 'Success' not in resx:
-                        ##('Updation Failed..........')
+                        #('Updation Failed..........')
                         logging.info('Updation Failed..........')
                  else:
-                        ##('Successfully updated the order')
+                        #('Successfully updated the order')
                         logging.info('Successfully updated the order')
                         ######################################################################
                         today=DT.now
                         year1=today().strftime('%Y')
                         month=today().strftime('%B')
                         currentdate=today().strftime('%m-%d-%Y')
-                        ##(currentdate)       
+                        #(currentdate)       
                         logging.info("Currentdate {}".format(currentdate))
                         def foldercreation():        
                             folder="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                             os.makedirs(folder)
-                            ##("folder created")
+                            #("folder created")
                             logging.info("folder created") 
                         if zadd.__contains__('#') or zadd.__contains__('Union') or zadd.__contains__('UNION') or zadd.__contains__('APT') or zadd.__contains__('apt'):
                             foldercreation()
                         else:
                             trial=zadd.replace(",","")
                             trial=trial.strip()
-                            ##("replaced trial:",trial)
+                            #("replaced trial:",trial)
                             trial=trial.split(" ")           
                             zip=trial[-1]   
                             trial=trial[:2]
                             x=" ".join(trial)
                             trial=x.lower()
-                            ##("folderzip:",zip)
+                            #("folderzip:",zip)
                             logging.info(zip)
-                            ##("foldertrial:",trial)       
+                            #("foldertrial:",trial)       
                             logging.info(trial)  
                             path="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient
-                            ##(os.listdir(path))
+                            #(os.listdir(path))
                             logging.info(os.listdir(path))
                             addfolders=os.listdir(path)
                             for i in addfolders:
@@ -320,57 +314,56 @@ def updateATS(engagement_document_id,zadd,mainclient,orderid,due,adrs,typ,portId
                                 list=i[:2]
                                 x=" ".join(list)
                                 listadd=x.lower()
-                                ##("listadd=",listadd)
-                                ##("zippro:",zippro)
-                                ##("i=",i)
+                                #("listadd=",listadd)
+                                #("zippro:",zippro)
+                                #("i=",i)
                                 if trial==listadd and zip==zippro:
                                     old="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+oldaddress
                                     new="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                                     os.rename(old,new)
-                                    ##("Folder renamed")
+                                    #("Folder renamed")
                                     logging.info("Folder renamed")
                                     break
                                 elif trial==listadd and typeofzip==False:
                                     old="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+oldaddress
                                     new="Z:\\BPO\\"+year1+"//"+month+"//"+currentdate+"//"+mainclient+"//"+zadd
                                     os.rename(old,new)
-                                    ##("Folder renamed")
+                                    #("Folder renamed")
                                     logging.info("Folder renamed")
                                     break  
                                 else:
-                                    ##("match not found moving to next address")
+                                    #("match not found moving to next address")
                                     logging.info("match not found moving to next address")                     
 
-                            ##(addfolders.__contains__(zadd))
+                            #(addfolders.__contains__(zadd))
                             try:
                                 if addfolders.__contains__(zadd)==False:
                                     foldercreation()
                                 else:
-                                    ##("no need to create folder")
+                                    #("no need to create folder")
                                     logging.info("no need to create folder")       
                             except Exception as e:
-                                ##(e)
-                                logging.info(e)
+                               logging.info(e)
             #####################################################################
         else:
            
                 if not clientId:
-                    ##('Client Not Active or Unable to Map Client!!')
+                    #('Client Not Active or Unable to Map Client!!')
                     logging.info('Client Not Active or Unable to Map Client!!')
                     if client!="Sharyn" and client!="Sharyn Sharyn" and client!="Sharyn Jenny" and client!="Sharyn Matt" and client!="Matthew Daw" and client!="Sharyn-Sharyn" and client!="Sharyn-Jenny" and client!="Sharyn-Matt":
                         mapping_mailsend('clientname',address_copy,portal,client,typ,'teamsoftware@ecesistech.com','Mapping Failed.... Clientname!')
                 if not zipcode:
-                    ##('Invalid Zipcode!!')
+                    #('Invalid Zipcode!!')
                     logging.info('Invalid Zipcode!!')
                 if not typId:
-                    ##('Unable to map order Type -- {}'.format(typ))
+                    #('Unable to map order Type -- {}'.format(typ))
                     logging.info('Unable to map order Type -- {}'.format(typ))
                     mapping_mailsend('ordertype',address_copy,portal,client,typ,'mapping@ecesistech.com','Mapping Failed.... Order Type!')
                 if not portId:
-                    ##('Unable to map portal!!')
+                    #('Unable to map portal!!')
                     logging.info('Unable to map portal!!')
     except Exception as ex:
-        ##(f'Exception raised .. in check function: {ex}')
+        #(f'Exception raised .. in check function: {ex}')
         logging.info(f'Exception raised .. in check function: {ex}')
                         
 def check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,username):
@@ -445,14 +438,13 @@ def check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_
             response1=session.post(url, json=json_data,headers=headers)
             response1=json.loads(response1.text)
             if response1['records'] != 0:
-                 ##("res")
-                 #logging.info(res)
+                 #("res")
                  if "EngagementDocumentID" in response1['rows'][0]:
                     engagement_document_id = response1['rows'][0]['EngagementDocumentID']
-                    ##("EngagementDocumentID:", engagement_document_id)
+                    #("EngagementDocumentID:", engagement_document_id)
                  else:
                     EngagementDocumentID = None
-                    ##("engagement_document_id is not present")
+                    #("engagement_document_id is not present")
 
             details=response1['rows']
             #('Orders in progress: {}'.format(len(details)))
@@ -462,17 +454,17 @@ def check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_
                 try:
                     if 'EngagementDocumentID' in str(o):
                          engagement_document_id=o['EngagementDocumentID']
-                         ##("EngagementDocumentID:", engagement_document_id)
+                         #("EngagementDocumentID:", engagement_document_id)
                          
                     else:
                          EngagementDocumentID = None
-                    ##(o['OnHold'])
+                    #(o['OnHold'])
                     if o['OnHold']== False:
                         address= '{} {} {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
                         folderadd= '{}, {}, {} {}'.format(o['SubjectPropertyAddress1'],o['SubjectPropertyCity'],o['SubjectPropertyState'],o['SubjectPropertyPostalCode'])
                         #######################################################################
                         portaladdress = re.sub('\s+', ' ', folderadd).strip()
-                        ##(portaladdress)
+                        #(portaladdress)
                         logging.info("Org Address: {}".format(portaladdress))
                         zadd=folderadd
                         # headers = {
@@ -518,15 +510,14 @@ def check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_
                         AssetType= o['VendorProduct'].strip()
                         Fee=o['VendorFee']
                         duedate=o['DueDate']
-                        ##('Due date from portal is :', duedate)
+                        #('Due date from portal is :', duedate)
                         if "." in duedate:
                              duedate=duedate.split(".")[0]
-                             ##("duedate :",duedate)
-                             logging.info(duedate)
+                             #("duedate :",duedate)
                         logging.info('Due date from portal is :'.format(duedate))
                         duedate= DT.strptime(duedate,'%Y-%m-%dT%H:%M:%S').strftime("%#m/%#d/%Y")                       
                         due=duedate.replace('/Date(','').replace(')/','')
-                        ##('Converted Due date from portal is :', duedate)
+                        #('Converted Due date from portal is :', duedate)
                         logging.info('Converted Due date from portal is :'.format(duedate))
                         #(orderid,address,AssetType,Fee,duedate)
                         # logging.info(orderid,address,AssetType,Fee,duedate)
@@ -534,24 +525,22 @@ def check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_
                         logging.info(address)
                         logging.info(AssetType)
                         logging.info(duedate)
-                        ##('updateATS')
+                        #('updateATS')
                         updateATS(engagement_document_id,zadd,mainclient,orderid,duedate,address,AssetType,ats_portal_id,ats_client_id,Fee,portal,client,session)
                         #######UPDATING ORDER DETAILS TO DB#########
                     else:
-                        ##("Past due order----no need to update")
                         logging.info("Past due order----no need to update")
                 except Exception as ex:
-                    ##('exception here')
+                    #('exception here')
                     logging.info('exception here')
-                    ##(ex)
+                    #(ex)
                     logging.info(ex)           
         else:
             url = "http://192.168.2.95/uporder/uppython.php?$cid={}".format(cid)
             r = requests.get(url)
-            ##('Bad Password')
-            logging.info("Bad Password")    
+            #('Bad Password')    
     except Exception as ex:
-        ##(f'Exception raised .. in check function: {ex}')
+        #(f'Exception raised .. in check function: {ex}')
         logging.info(f'Exception raised .. in check function: {ex}')
 def Query_JSON(json_file_path):
     with open(json_file_path, 'r') as json_file:
@@ -560,7 +549,7 @@ def Query_JSON(json_file_path):
         cid=int(cid)
         # cid = 5952
         filtered_data = [entry for entry in data if entry.get("filedtype") == cid]
-        ##(filtered_data)
+        #(filtered_data)
     for value in filtered_data:
         for values in value['values']:
             mainclient = values.get('mainclient')
@@ -572,22 +561,22 @@ def Query_JSON(json_file_path):
             ordercheckstatus = values.get('ordercheckstatus')
             ats_client_id = values.get('ats_client_id')
             ats_portal_id = values.get('ats_portal_id')
-            # #('Fetching details from JSON file...')
-            # #('CID:', cid)
-            # #('Mainclient:', mainclient)
-            # #('Subclient:', subclient)
-            # #('Portal:', portal)
-            # #('Username:', username)
-            # #('Password:', password)
-            # #('Credstatus:', credstatus)
-            # #('Ordercheckstatus:', ordercheckstatus)
-            # #('ATS Client ID:', ats_client_id)
-            # #('ATS Portal ID:', ats_portal_id)
+            #('Fetching details from JSON file...')
+            #('CID:', cid)
+            #('Mainclient:', mainclient)
+            #('Subclient:', subclient)
+            #('Portal:', portal)
+            #('Username:', username)
+            #('Password:', password)
+            #('Credstatus:', credstatus)
+            #('Ordercheckstatus:', ordercheckstatus)
+            #('ATS Client ID:', ats_client_id)
+            #('ATS Portal ID:', ats_portal_id)
             ctypes.windll.kernel32.SetConsoleTitleW(f"{subclient}-{portal}")
             logger_portal(subclient,portal,mainclient)
             headers={}#sending headers to prevent login denied ORSS issue
             if credstatus == 'Active':                      
-                    ##('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
+                    #('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
                     logging.info('Checking {} - {} ->{} account'.format(mainclient,subclient,portal))
                     ###################################################################################
                     try:
@@ -651,21 +640,21 @@ def Query_JSON(json_file_path):
                                     resp = session.post(loginurl, data=data,headers=headers)
                                     check(session, resp, mainclient, subclient, portal, cid, ats_client_id, ats_portal_id,username)#pass ATS ID's
                                     random_sleep_time = randint(900,1200)
-                                    ##('Next account will be checked after %s seconds' % (random_sleep_time))
+                                    #('Next account will be checked after %s seconds' % (random_sleep_time))
                                     logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
                                     time.sleep(random_sleep_time) 
                                 
                     except Exception as ex:
-                                    ##('Exception raised ..')
+                                    #('Exception raised ..')
                                     logging.info('Exception raised ..')
-                                    ##(ex)
+                                    #(ex)
                                     logging.info(ex)
                                     time.sleep(10)
             else:
-                ##('Bad Password')
+                #('Bad Password')
                 logging.info('Bad Password')
                 random_sleep_time = randint(900,1200)
-                ##('Next account will be checked after %s seconds' % (random_sleep_time))
+                #('Next account will be checked after %s seconds' % (random_sleep_time))
                 logging.info('Next account will be checked after {} seconds'.format(random_sleep_time))
                 time.sleep(random_sleep_time) 
 # json_file_path = 'S:\PORTAL ORDER UPDATION\output_data.json'
